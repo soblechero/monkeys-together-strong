@@ -1,11 +1,18 @@
 <template>
   <div id="container">
     <strong>{{ name }}</strong>
+    <p>isDevelopment: {{ config.isDevelopment }}</p>
+    <p>Env Mode: {{ config.mode }}</p>
+    <p>Use Mocks: {{ config.useMocks }}</p>
+    <p>API Base URL: {{ config.backendUrl }}</p>
     <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
   </div>
 </template>
 
 <script setup lang="ts">
+import config from '@/config';
+
+//const apiUrl = import.meta.env.VITE_API_BASE_URL;
 defineProps({
   name: String,
 });

@@ -4,6 +4,9 @@ import router from './router';
 
 import { IonicVue } from '@ionic/vue';
 
+import config from '@/config';
+
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
@@ -28,16 +31,22 @@ import '@ionic/vue/css/display.css';
  */
 
 /* @import '@ionic/vue/css/palettes/dark.always.css'; */
-/* @import '@ionic/vue/css/palettes/dark.class.css'; */
-import '@ionic/vue/css/palettes/dark.system.css';
+import '@ionic/vue/css/palettes/dark.class.css';
+/* import '@ionic/vue/css/palettes/dark.system.css'; */
 
 /* Theme variables */
 import './theme/variables.css';
 /*  Tailwind directives */
 import './theme/tailwind.css';
 
+if (config.useMocks) {
+  import('@/mocks/setupApiMocks').then(setupApiMocks => setupApiMocks.default());
+}
+
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue, {
+    backButtonText: '',
+  })
   .use(router);
 
 router.isReady().then(() => {
