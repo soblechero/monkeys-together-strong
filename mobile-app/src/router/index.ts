@@ -4,6 +4,7 @@ import { getAuthToken } from '@/services/preferences';
 //import TabsPage from '../views/TabsPage.vue';
 import MainPage from '@/views/MainPage.vue';
 import AuthPage from '@/views/AuthPage.vue';
+import OnboardingPage from "@/views/OnboardingPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
 /*  {
@@ -66,6 +67,27 @@ const routes: Array<RouteRecordRaw> = [
     path: '/auth',
     component: AuthPage,
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/onboarding',
+    component: OnboardingPage,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        redirect: 'preferences'
+      },
+      {
+        path: 'preferences',
+        component: () => import('@/components/PreferencesSelection.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'get-started',
+        component: () => import('@/components/GetStarted.vue'),
+        meta: { requiresAuth: true }
+      }
+    ]
   }
 ]
 
@@ -87,6 +109,5 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 })
-
 
 export default router

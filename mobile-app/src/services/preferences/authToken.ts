@@ -15,4 +15,4 @@ const removeAuthToken = async (): Promise<void> => {
     await Preferences.remove({ key: AUTH_TOKEN_KEY });
 };
 
-export { getAuthToken, setAuthToken, removeAuthToken};
+export { getAuthToken, setAuthToken, removeAuthToken };

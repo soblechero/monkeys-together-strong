@@ -1,25 +1,25 @@
 <template>
   <ion-page>
-<!--    <ion-header>
-      <ion-toolbar>
-        <ion-buttons>
-          <ion-back-button default-href="/auth" />
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>-->
+    <!--    <ion-header>
+          <ion-toolbar>
+            <ion-buttons>
+              <ion-back-button default-href="/auth" />
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>-->
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar slot="bottom">
+      <ion-tab-bar slot="bottom" class="custom-shadow">
         <ion-tab-button tab="home" href="/home">
-          <ion-icon aria-hidden="true" :icon="homeIcon" />
+          <ion-icon aria-hidden="true" :icon="home"/>
         </ion-tab-button>
 
         <ion-tab-button tab="search" href="/search">
-          <ion-icon aria-hidden="true" :icon="searchIcon" />
+          <ion-icon aria-hidden="true" :icon="search"/>
         </ion-tab-button>
 
         <ion-tab-button tab="profile" href="/profile">
-          <ion-icon aria-hidden="true" :icon="profileIcon" />
+          <ion-icon aria-hidden="true" :icon="person"/>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
@@ -27,6 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonIcon} from '@ionic/vue';
-import { home as homeIcon, search as searchIcon, person as profileIcon } from 'ionicons/icons';
+import {IonPage, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonIcon} from '@ionic/vue';
+import {home, search, person} from 'ionicons/icons';
 </script>
+
+<style scoped>
+.custom-shadow {
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.05);
+}
+</style>
