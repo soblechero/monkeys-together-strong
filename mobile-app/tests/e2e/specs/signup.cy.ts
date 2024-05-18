@@ -21,7 +21,7 @@ describe('Signup', () => {
 
         cy.visit('/auth');
         cy.contains('Signup').click();
-        cy.get('input[placeholder="Username"]').type(newUser.username);
+        cy.get('input[placeholder="Username"]').type(newUser.username!);
         cy.get('input[placeholder="Email"]').type(newUser.email);
         cy.get('input[placeholder="Password"]').type(newUser.password);
         cy.get('button').contains('Continue').click();
