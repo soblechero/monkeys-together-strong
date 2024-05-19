@@ -7,7 +7,7 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="ion-padding relative">
+    <ion-content :fullscreen="true" class="ion-padding relative">
       <div class="ion-padding-top">
         <h2 class="text-center text-xl font-bold">Select Your Game Genres</h2>
         <p class="mb-4 text-center text-sm">Fine-tune discoveries to match your playstyle</p>

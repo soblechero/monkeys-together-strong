@@ -3,7 +3,7 @@
     <!--    <ion-header>
           <ion-toolbar>
             <ion-buttons>
-              <ion-back-button default-href="/auth" />
+              <ion-back-button />
             </ion-buttons>
           </ion-toolbar>
         </ion-header>-->
