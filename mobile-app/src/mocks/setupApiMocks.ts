@@ -48,7 +48,7 @@ const setupApiMocks = () => {
         }
     });
 
-    mock.onGet('/genres').reply(200, genres as GenresList);
+    mock.onGet('/genres').reply(200, {genres: genres} as GenresList);
 
     mock.onGet('/user/genres').reply((config) => {
         const token = config.headers?.Authorization;

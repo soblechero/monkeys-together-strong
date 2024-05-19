@@ -1,13 +1,18 @@
-{
-  "genres": [
-    "Adventure",
-    "Shooter",
-    "Strategy",
-    "RPG",
-    "Simulation",
-    "Sports",
-    "Puzzle",
-    "Casual",
-    "Action"
-  ]
-}
+[
+  "Adventure",
+  "Simulator",
+  "RPG",
+  "Turn-based strategy",
+  "Platform",
+  "Shooter",
+  "Card & Board Game",
+  "Strategy",
+  "Survival",
+  "Rhythm",
+  "Roguelike",
+  "Action",
+  "Simulation",
+  "Sports",
+  "Puzzle"
+]
+

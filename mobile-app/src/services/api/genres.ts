@@ -15,6 +15,7 @@ const getUserGenres = async (): Promise<string[]> => {
 
 const updateUserGenres = async (genres: string[]): Promise<void> => {
     const request: GenresList = { genres };
+    console.log('Updating genres:', request)
     try {
         await apiClient.post('/user/genres', request);
         await setSelectedGenres(genres);
