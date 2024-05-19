@@ -1,9 +1,9 @@
 <template>
   <ion-page>
     <ion-header :translucent="true" class="ion-no-border">
-      <ion-toolbar >
+      <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button defaultHref="#"/>
+          <ion-back-button/>
         </ion-buttons>
       </ion-toolbar>
       <ion-toolbar class="ion-padding">

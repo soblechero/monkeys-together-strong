@@ -3,14 +3,14 @@ import { GenresList } from '@/types/genres';
 import { setSelectedGenres } from '@/services/preferences/selectedGenres';
 import handleApiError from './handleApiError';
 
-const getGenres = async (): Promise<GenresList> => {
+const getGenres = async (): Promise<string[]> => {
     const response = await apiClient.get<GenresList>('/genres');
-    return response.data;
+    return response.data.genres;
 };
 
-const getUserGenres = async (): Promise<GenresList> => {
+const getUserGenres = async (): Promise<string[]> => {
     const response = await apiClient.get<GenresList>('/user/genres');
-    return response.data;
+    return response.data.genres;
 };
 
 const updateUserGenres = async (genres: string[]): Promise<void> => {

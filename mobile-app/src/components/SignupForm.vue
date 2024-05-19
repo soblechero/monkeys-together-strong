@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSignup" class="signup-form">
+  <form @submit.prevent="handleSignup" class="relative ion-padding">
       <ion-input type="text" fill="outline" placeholder="Username" v-model="username" required
                  class="mt-4 border-b border-gray-300 rounded-md" label="Username" label-placement="floating"/>
       <ion-input type="email" fill="outline" placeholder="Email" v-model="email" required
@@ -7,7 +7,7 @@
       <ion-input type="password" fill="outline" placeholder="Password" v-model="password" required
                  class="mt-4 border-b border-gray-300 rounded-md" label="Password" label-placement="floating"/>
       <ion-text v-if="errorMessage" color="danger">{{ errorMessage }}</ion-text>
-    <ion-button type="submit" expand="block" class="mt-8">Continue</ion-button>
+    <ion-button type="submit" expand="block" class="ion-padding fixed inset-x-0 bottom-5">Continue</ion-button>
   </form>
 </template>
 
@@ -16,7 +16,7 @@ import { IonInput, IonText, IonButton } from '@ionic/vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { signup } from '@/services/api';
-import handleError from './handleError';
+import handleError from '@/utils/handleError';
 
 const username = ref('');
 const email = ref('');

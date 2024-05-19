@@ -1,18 +1,18 @@
-import { Preferences } from '@capacitor/preferences';
+import {Preferences} from '@capacitor/preferences';
 
 const SELECTED_GENRES_KEY = 'selectedGenres';
 
-const getSelectedGenres = async (): Promise<string[] | null> => {
-    const { value } = await Preferences.get({ key: SELECTED_GENRES_KEY });
-    return value ? JSON.parse(value) : null;
+const getSelectedGenres = async (): Promise<string[]> => {
+    const {value} = await Preferences.get({key: SELECTED_GENRES_KEY});
+    return value ? JSON.parse(value) : [];
 };
 
 const setSelectedGenres = async (genres: string[]): Promise<void> => {
-    await Preferences.set({ key: SELECTED_GENRES_KEY, value: JSON.stringify(genres) });
+    await Preferences.set({key: SELECTED_GENRES_KEY, value: JSON.stringify(genres)});
 };
 
 const clearSelectedGenres = async (): Promise<void> => {
-    await Preferences.remove({ key: SELECTED_GENRES_KEY });
+    await Preferences.remove({key: SELECTED_GENRES_KEY});
 };
 
 const addGenre = async (genre: string): Promise<void> => {
@@ -31,4 +31,4 @@ const removeGenre = async (genre: string): Promise<void> => {
     }
 };
 
-export { getSelectedGenres, setSelectedGenres, clearSelectedGenres, addGenre, removeGenre };
+export {getSelectedGenres, setSelectedGenres, clearSelectedGenres, addGenre, removeGenre};

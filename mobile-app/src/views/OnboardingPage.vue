@@ -1,15 +1,14 @@
 <template>
   <ion-page>
     <ion-content>
-      <router-view />
+      <ion-router-outlet></ion-router-outlet>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-// No se requiere lógica adicional aquí
+import {IonPage, IonContent, IonRouterOutlet} from '@ionic/vue';
 </script>
 
 <style scoped>
-/* Estilos adicionales si es necesario */
 </style>

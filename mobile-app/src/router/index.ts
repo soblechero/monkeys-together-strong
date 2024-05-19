@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import { getAuthToken } from '@/services/preferences';
-//import TabsPage from '../views/TabsPage.vue';
 import MainPage from '@/views/MainPage.vue';
 import AuthPage from '@/views/AuthPage.vue';
 import OnboardingPage from "@/views/OnboardingPage.vue";
@@ -75,16 +74,16 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        redirect: 'preferences'
+        redirect: '/onboarding/preferences'
       },
       {
         path: 'preferences',
-        component: () => import('@/components/PreferencesSelection.vue'),
+        component: () => import('@/views/PreferencesSelectionPage.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'get-started',
-        component: () => import('@/components/GetStarted.vue'),
+        component: () => import('@/views/GetStartedPage.vue'),
         meta: { requiresAuth: true }
       }
     ]
