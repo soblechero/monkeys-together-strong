@@ -58,7 +58,7 @@ import {chevronForward} from 'ionicons/icons';
 import {ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 import {getGenres, updateUserGenres} from '@/services/api/genres';
-import {getSelectedGenres, setSelectedGenres} from '@/services/preferences/selectedGenres';
+import {getSelectedGenres, setSelectedGenres} from '@/services/preferences/genres';
 import handleError from '@/utils/handleError';
 
 const genres = ref<string[]>([]);

@@ -1,2 +1,3 @@
 export * from './authToken';
-export * from './selectedGenres';
+export * from './genres';
+export * from './games';

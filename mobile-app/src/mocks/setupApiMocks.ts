@@ -1,9 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 import {apiClient} from '@/services/api';
-import {errors, users as usersData, genres} from '@/mocks';
-import {ApiError, AuthResponse, User, GenresList} from '@/types';
+import {errors, users as usersData, genres, games as gamesData} from '@/mocks';
+import {ApiError, AuthResponse, User, GenresList, GamesList} from '@/types';
+import {convertGamesList} from "@/utils";
 
 const users: User[] = usersData as User[];
+const games: GamesList = convertGamesList(gamesData);
 
 const setupApiMocks = () => {
     const mock = new MockAdapter(apiClient, {delayResponse: 500});
@@ -52,7 +54,7 @@ const setupApiMocks = () => {
 
     mock.onGet('/user/genres').reply((config) => {
         const token = config.headers?.Authorization;
-        console.log('Received token for get user genres:', token);
+        console.log('User token for get /user/genres:', token);
 
         const userGenres: GenresList = {genres: ['Adventure', 'Shooter']};
         return [200, userGenres];
@@ -60,14 +62,63 @@ const setupApiMocks = () => {
 
     mock.onPost('/user/genres').reply((config) => {
         const token = config.headers?.Authorization;
-        console.log('Received token for update user genres:', token);
+        console.log('User token for post /user/genres:', token);
 
         const {genres}: GenresList = JSON.parse(config.data);
-        console.log(`User genres for token ${token}:`, genres);
+        console.log(`Updated user genres for token ${token}:`, genres);
         return [200, {message: 'Genres updated successfully'}];
+    });
+
+    mock.onGet('/games').reply(200, games as GamesList);
+
+    mock.onGet('/games/search').reply(config => {
+        const params = config.params;
+        let filteredGames = games;
+        if (params.genre) {
+            filteredGames = filteredGames.filter(game => game.genres.includes(params.genre));
+        }
+        if (params.name) {
+            filteredGames = filteredGames.filter(game => game.name.toLowerCase().includes(params.name.toLowerCase()));
+        }
+        if (params.releaseDate) {
+            const releaseDate = new Date(params.releaseDate);
+            filteredGames = filteredGames.filter(game => game.releaseDate.getTime() === releaseDate.getTime());
+        }
+        if (params.platform) {
+            filteredGames = filteredGames.filter(game => game.platforms.includes(params.platform));
+        }
+        return [200, filteredGames];
+    });
+
+    mock.onGet('/user/games').reply(async config => {
+        const token = config.headers?.Authorization;
+        console.log('User token for get /user/games:', token);
+
+        // const {value} = await getAuthToken();
+        // if (token !== `Bearer ${value}`) {
+        //     return [401, {message: 'Invalid token'}];
+        // }
+
+        const userGames: GamesList = games.slice(0, 5); // Mocking with first 5 games as an example
+        return [200, userGames];
+    });
+
+    mock.onPost('/user/games').reply(async config => {
+        const token = config.headers?.Authorization;
+        console.log('User token for post /user/games:', token);
+
+        // const {value} = await getAuthToken();
+        // if (token !== `Bearer ${value}`) {
+        //     return [401, {message: 'Invalid token'}];
+        // }
+
+        const {games} = JSON.parse(config.data);
+        console.log('Updated user games:', games);
+        return [200];
     });
 
     return mock;
 };
+
 
 export default setupApiMocks;

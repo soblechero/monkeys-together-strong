@@ -3,11 +3,18 @@ export interface Game {
     genres: string[];
     thumb: string;
     artwork: string;
-    howlongtobeat: number; // Cambiado a number
+    howLongToBeat: number;
     rating: number;
-    release_date: Date; // Cambiado a Date
+    releaseDate: Date;
     summary: string;
     platforms: string[];
 }
 
 export type GamesList = Game[];
+
+export interface GameSearchCriteria {
+    genre?: string;
+    name?: string;
+    releaseDate?: Date;
+    platform?: string;
+}
