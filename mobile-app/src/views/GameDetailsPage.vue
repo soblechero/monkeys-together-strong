@@ -19,13 +19,6 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <!--      <div class="relative">-->
-      <!--        <img :src="game?.artwork" alt="Artwork" class="w-full h-64 object-cover">-->
-      <!--        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-lg p-2">-->
-      <!--          {{ game?.name }}-->
-      <!--        </div>-->
-      <!--      </div>-->
-
       <div class="ion-padding-horizontal">
         <div class="flex justify-between items-center mb-2">
           <h1 class="text-xl font-bold">{{ game?.name }}</h1>
@@ -40,7 +33,7 @@
         </div>
 
         <div class="mb-2">
-          <div v-for="genre in game?.genres" :key="genre" class="inline-block mr-2">
+          <div v-for="genre in game?.genres" :key="genre" class="inline-block">
             <ion-chip>#{{ genre }}</ion-chip>
           </div>
         </div>

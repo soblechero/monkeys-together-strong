@@ -143,11 +143,11 @@ const sequentialBgColor = (index: number) => {
   return colors[index % colors.length];
 };
 
-const goToGenrePage = (genre: string) => {
-  if (!genre) {
+const goToGenrePage = (name: string) => {
+  if (!name) {
     return;
   }
-  router.push({name: 'GenrePage', params: {genre}});
+  router.push({name: 'GenrePage', params: {name}});
 };
 
 const showToast = (message: string, color: string) => {

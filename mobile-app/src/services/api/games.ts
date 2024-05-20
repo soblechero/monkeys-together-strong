@@ -44,7 +44,7 @@ const updateUserGames = async (gameNames: string[]): Promise<void> => {
 
 const addGameToFavorites = async (name: string): Promise<void> => {
     try {
-        await apiClient.post('/user/game', { game: name });
+        await apiClient.post('/user/game', {game: name});
         await addGameToPreferences(name);
     } catch (error) {
         throw handleApiError(error, 'Failed to add game to favorites.');

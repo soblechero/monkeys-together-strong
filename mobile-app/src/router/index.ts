@@ -72,7 +72,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import ("@/views/GenrePage.vue"),
     meta: { requiresAuth: true }
   }
-
 ]
 
 const router = createRouter({
@@ -93,5 +92,6 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 })
+
 
 export default router

@@ -143,6 +143,25 @@ const setupApiMocks = () => {
     });
 
 
+    mock.onPost('/user/genre').reply(config => {
+        const token = config.headers?.Authorization;
+        console.log(`User token for post /user/genre:`, token);
+
+        const {genre} = JSON.parse(config.data);
+        console.log('Adding genre:', genre);
+        return [200, {message: 'Genre added to favorites'}];
+    });
+
+    mock.onDelete(/\/user\/genre\/.*/).reply(config => {
+        const token = config.headers?.Authorization;
+        console.log(`User token for delete /user/genre/$name:`, token);
+
+        const genreName = config.url!.split('/').pop();
+        console.log('Removing genre:', genreName);
+        return [200, {message: 'Game removed from favorites'}];
+    });
+
+
     return mock;
 };
 
