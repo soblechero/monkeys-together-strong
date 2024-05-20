@@ -7,33 +7,6 @@ import MainPage from '@/views/MainPage.vue';
 //import GameDetailsPage from "@/views/GameDetailsPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
-/*  {
-    path: '/',
-    redirect: '/tabs/tab1'
-  },
-  {
-    path: '/tabs/',
-    component: TabsPage,
-    children: [
-      {
-        path: '',
-        redirect: '/tabs/tab1'
-      },
-      {
-        path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
-      },
-      {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
-      },
-      {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
-      }
-    ]
-  }
-]*/
   {
     path: '/',
     component: MainPage,
@@ -50,14 +23,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'search',
-        //component: () => import('@/views/SearchPage.vue'),
-        component: () => import('@/views/Tab1Page.vue'),
+        component: () => import('@/views/SearchPage.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'profile',
         //component: () => import('@/views/ProfilePage.vue'),
-        component: () => import('@/views/Tab3Page.vue'),
+        component: () => import('@/views/Tab1Page.vue'),
         meta: { requiresAuth: true }
       }
     ]
@@ -89,11 +61,18 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/details/:name',
+    path: '/game/:name',
     name: 'GameDetails',
     component: () => import ("@/views/GameDetailsPage.vue"),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/genre/:name',
+    name: 'GenrePage',
+    component: () => import ("@/views/GenrePage.vue"),
+    meta: { requiresAuth: true }
   }
+
 ]
 
 const router = createRouter({

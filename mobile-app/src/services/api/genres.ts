@@ -1,6 +1,6 @@
 import apiClient from './apiClient';
 import { GenresList } from '@/types/genres';
-import { setSelectedGenres } from '@/services/preferences/genres';
+import { setPreferenceGenres } from '@/services/preferences/genres';
 import {handleApiError} from '@/services/api';
 
 const getGenres = async (): Promise<string[]> => {
@@ -18,7 +18,7 @@ const updateUserGenres = async (genres: string[]): Promise<void> => {
     console.log('Updating genres:', request)
     try {
         await apiClient.post('/user/genres', request);
-        await setSelectedGenres(genres);
+        await setPreferenceGenres(genres);
     } catch (error) {
         throw handleApiError(error, 'Failed to update genres.');
     }

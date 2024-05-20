@@ -6,19 +6,19 @@ const addGameToPreferences = async (gameName: string): Promise<void> => {
     const games = await getPreferenceGames();
     if (!await isGameInPreferences(gameName)) {
         games.push(gameName);
-        await Preferences.set({key: FAVORITE_GAMES_KEY, value: JSON.stringify(games)});
+        await setPreferenceGames(games);
     }
 };
 
 const removeGameFromPreferences = async (gameName: string): Promise<void> => {
     let games = await getPreferenceGames();
-    games = games.filter(name => name !== gameName); // Filtra el nombre del juego que quieres eliminar
-    await Preferences.set({key: FAVORITE_GAMES_KEY, value: JSON.stringify(games)});
+    games = games.filter(name => name !== gameName);
+    await setPreferenceGames(games);
 };
 
 const isGameInPreferences = async (name: string): Promise<boolean> => {
-    const favorites = await getPreferenceGames();
-    return favorites.includes(name);
+    const favoriteGames = await getPreferenceGames();
+    return favoriteGames.includes(name);
 };
 
 const getPreferenceGames = async (): Promise<string[]> => {

@@ -28,7 +28,7 @@
 
       <div class="ion-padding-horizontal">
         <div class="flex justify-between items-center mb-2">
-          <h1 class="text-2xl font-bold">{{ game?.name }}</h1>
+          <h1 class="text-xl font-bold">{{ game?.name }}</h1>
           <ion-button @click="toggleFavorite" slot="end" fill="clear" shape="round">
             <ion-icon :icon="isFavorite ? checkmarkCircle : addCircle" slot="icon-only" size="large" color="primary"/>
           </ion-button>
@@ -50,7 +50,7 @@
         </div>
 
         <div>
-          <h2 class="text-xl font-bold mb-2">Similar content</h2>
+          <h2 class="text-lg font-bold">Similar content</h2>
           <GameList :games="similarGames"/>
         </div>
       </div>
@@ -103,7 +103,8 @@ const toast = ref({
 const fetchGameDetails = async () => {
   try {
     game.value = await getGameDetails(gameName);
-    similarGames.value = await getSimilarGames(game.value.genres);
+    const similarGamesList = await getSimilarGames(game.value.genres);
+    similarGames.value = similarGamesList.filter(similarGame => similarGame.name !== gameName);
     isFavorite.value = await isGameInPreferences(gameName);
   } catch (error) {
     const errorMessage = handleError(error, 'Failed to load game details.');

@@ -5,14 +5,14 @@
         <ion-chip :color="activeTag === 'all' ? 'primary' : 'medium'" @click="tagChanged('all')">
           <ion-label>All</ion-label>
         </ion-chip>
-        <ion-chip :color="activeTag === 'news' ? 'primary' : 'medium'" @click="tagChanged('news')">
-          <ion-label>News</ion-label>
+        <ion-chip :color="activeTag === 'new' ? 'primary' : 'medium'" @click="tagChanged('new')">
+          <ion-label>New</ion-label>
         </ion-chip>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
       <div class="ion-padding-top relative" >
-        <h2 class="text-lg font-bold">Chosen for you</h2>
+        <h2 class="text-lg font-bold pl-1">Chosen for you</h2>
         <ion-card class="h-36 object-cover rounded-lg" @click="goToGameDetails(chosenGame?.name)">
           <img :src="chosenGame?.artwork" alt="Chosen game" class="w-full rounded-lg"/>
           <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-lg p-2">
@@ -22,7 +22,7 @@
       </div>
 
       <div v-for="(games, genre) in filteredGamesByGenre" :key="genre" class="pt-4">
-        <h2 class="text-lg font-bold">{{ `#${genre}` }}</h2>
+        <h2 class="text-lg font-bold pl-1">{{ `#${genre}` }}</h2>
         <swiper
             :modules="[Pagination, FreeMode, Navigation, Scrollbar, A11y]"
             :slides-per-view="2"
@@ -67,7 +67,7 @@ import {
 } from '@ionic/vue';
 import {ref, onMounted, computed} from 'vue';
 import {useRouter} from 'vue-router';
-import {getSelectedGenres} from '@/services/preferences/genres';
+import {getPreferenceGenres} from '@/services/preferences/genres';
 import {searchGames} from '@/services/api/games';
 import {Game} from '@/types';
 import {handleError} from '@/utils';
@@ -91,8 +91,8 @@ const router = useRouter();
 
 const fetchGames = async () => {
   try {
-    genres.value = await getSelectedGenres();
-    const releaseYears = activeTag.value === 'news' ? [new Date().getFullYear()] : [];
+    genres.value = await getPreferenceGenres();
+    const releaseYears = activeTag.value === 'new' ? [new Date().getFullYear()] : [];
     const gamesList = await searchGames(genres.value, [], releaseYears, []);
 
     gamesByGenre.value = genres.value.reduce((acc, genre) => {
@@ -120,7 +120,7 @@ const goToGameDetails = (gameName: string | undefined) => {
   if (!gameName) {
     return;
   }
-  //router.push({path: `/details/${name}`});
+  //router.push({path: `/game/${name}`});
   router.push({name: 'GameDetails', params: {name: gameName}});
 };
 

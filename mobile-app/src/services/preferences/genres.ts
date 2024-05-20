@@ -1,34 +1,47 @@
 import {Preferences} from '@capacitor/preferences';
 
-const SELECTED_GENRES_KEY = 'selectedGenres';
+const FAVORITE_GENRES_KEY = 'favoriteGenres';
 
-const getSelectedGenres = async (): Promise<string[]> => {
-    const {value} = await Preferences.get({key: SELECTED_GENRES_KEY});
+const getPreferenceGenres = async (): Promise<string[]> => {
+    const {value} = await Preferences.get({key: FAVORITE_GENRES_KEY});
     return value ? JSON.parse(value) : [];
 };
 
-const setSelectedGenres = async (genres: string[]): Promise<void> => {
-    await Preferences.set({key: SELECTED_GENRES_KEY, value: JSON.stringify(genres)});
+const setPreferenceGenres = async (genres: string[]): Promise<void> => {
+    await Preferences.set({key: FAVORITE_GENRES_KEY, value: JSON.stringify(genres)});
 };
 
-const clearSelectedGenres = async (): Promise<void> => {
-    await Preferences.remove({key: SELECTED_GENRES_KEY});
+const clearPreferenceGenres = async (): Promise<void> => {
+    await Preferences.remove({key: FAVORITE_GENRES_KEY});
 };
 
-const addGenre = async (genre: string): Promise<void> => {
-    const genres = await getSelectedGenres();
-    if (genres && !genres.includes(genre)) {
+const addGenreToPreferences = async (genre: string): Promise<void> => {
+    const genres = await getPreferenceGenres();
+    if (!await isGenreInPreferences(genre)) {
         genres.push(genre);
-        await setSelectedGenres(genres);
+        await setPreferenceGenres(genres);
     }
 };
 
-const removeGenre = async (genre: string): Promise<void> => {
-    const genres = await getSelectedGenres();
+const removeGenreFromPreferences = async (genre: string): Promise<void> => {
+    const genres = await getPreferenceGenres();
     if (genres) {
         const updatedGenres = genres.filter(g => g !== genre);
-        await setSelectedGenres(updatedGenres);
+        await setPreferenceGenres(updatedGenres);
     }
 };
 
-export {getSelectedGenres, setSelectedGenres, clearSelectedGenres, addGenre, removeGenre};
+const isGenreInPreferences = async (genre: string): Promise<boolean> => {
+    const favoriteGenres = await getPreferenceGenres();
+    return favoriteGenres.includes(genre);
+};
+
+
+export {
+    getPreferenceGenres,
+    setPreferenceGenres,
+    clearPreferenceGenres,
+    addGenreToPreferences,
+    removeGenreFromPreferences,
+    isGenreInPreferences
+};
