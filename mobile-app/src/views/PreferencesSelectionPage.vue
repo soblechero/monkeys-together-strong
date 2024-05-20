@@ -34,8 +34,8 @@
           :message="toast.message"
           :color="toast.color"
           :duration="2000"
-          @did-dismiss="toast.isOpen = false"
-      ></ion-toast>
+          @did-dismiss="toast.isOpen = false">
+      </ion-toast>
     </ion-content>
   </ion-page>
 </template>
@@ -57,9 +57,9 @@ import {
 import {chevronForward} from 'ionicons/icons';
 import {ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
-import {getGenres, updateUserGenres} from '@/services/api/genres';
-import {getSelectedGenres, setSelectedGenres} from '@/services/preferences/genres';
-import handleError from '@/utils/handleError';
+import {getGenres, updateUserGenres} from '@/services/api';
+import {getSelectedGenres, setSelectedGenres} from '@/services/preferences';
+import {handleError} from '@/utils';
 
 const genres = ref<string[]>([]);
 const selectedGenres = ref<string[]>([]);

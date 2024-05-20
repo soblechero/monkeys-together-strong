@@ -1,10 +1,10 @@
 import apiClient from './apiClient';
-import { setAuthToken } from '@/services/preferences';
-import handleApiError from './handleApiError';
-import { AuthResponse, User } from '@/types';
+import {setAuthToken} from '@/services/preferences';
+import {handleApiError} from '@/services/api';
+import {AuthResponse, User} from '@/types';
 
 const login = async (email: string, password: string): Promise<string> => {
-    const user: User = { email, password };
+    const user: User = {email, password};
     try {
         const response = await apiClient.post<AuthResponse>('/login', user);
         await setAuthToken(response.data.access_token);
@@ -15,7 +15,7 @@ const login = async (email: string, password: string): Promise<string> => {
 };
 
 const signup = async (username: string, email: string, password: string): Promise<string> => {
-    const user: User = { username, email, password };
+    const user: User = {username, email, password};
     try {
         const response = await apiClient.post<AuthResponse>('/signup', user);
         await setAuthToken(response.data.access_token);
@@ -25,4 +25,4 @@ const signup = async (username: string, email: string, password: string): Promis
     }
 };
 
-export { login, signup };
+export {login, signup};

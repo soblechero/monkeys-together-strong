@@ -1,7 +1,7 @@
 import apiClient from './apiClient';
 import { GenresList } from '@/types/genres';
 import { setSelectedGenres } from '@/services/preferences/genres';
-import handleApiError from './handleApiError';
+import {handleApiError} from '@/services/api';
 
 const getGenres = async (): Promise<string[]> => {
     const response = await apiClient.get<GenresList>('/genres');

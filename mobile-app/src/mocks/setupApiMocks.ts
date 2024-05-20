@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import {apiClient} from '@/services/api';
 import {errors, users as usersData, genres, games as gamesData} from '@/mocks';
-import {ApiError, AuthResponse, User, GenresList, GamesList} from '@/types';
+import {ApiError, AuthResponse, User, GenresList, GamesList, GameSearchCriteria} from '@/types';
 import {convertGamesList} from "@/utils";
 
 const users: User[] = usersData as User[];
@@ -72,20 +72,27 @@ const setupApiMocks = () => {
     mock.onGet('/games').reply(200, games as GamesList);
 
     mock.onGet('/games/search').reply(config => {
-        const params = config.params;
-        let filteredGames = games;
-        if (params.genre) {
-            filteredGames = filteredGames.filter(game => game.genres.includes(params.genre));
+        const params: GameSearchCriteria = config.params;
+        let filteredGames: GamesList = games;
+        if (params.genres && params.genres.length > 0) {
+            filteredGames = filteredGames.filter(game =>
+                params.genres?.some(genre => game.genres.map(g => g.toLowerCase()).includes(genre.toLowerCase()))
+            );
         }
-        if (params.name) {
-            filteredGames = filteredGames.filter(game => game.name.toLowerCase().includes(params.name.toLowerCase()));
+        if (params.names && params.names.length > 0) {
+            filteredGames = filteredGames.filter(game =>
+                params.names?.some(name => game.name.toLowerCase().includes(name.toLowerCase()))
+            );
         }
-        if (params.releaseDate) {
-            const releaseDate = new Date(params.releaseDate);
-            filteredGames = filteredGames.filter(game => game.releaseDate.getTime() === releaseDate.getTime());
+        if (params.releaseYears && params.releaseYears.length > 0) {
+            filteredGames = filteredGames.filter(game =>
+                params.releaseYears?.some(year => new Date(game.releaseDate).getFullYear() === year)
+            );
         }
-        if (params.platform) {
-            filteredGames = filteredGames.filter(game => game.platforms.includes(params.platform));
+        if (params.platforms && params.platforms.length > 0) {
+            filteredGames = filteredGames.filter(game =>
+                params.platforms?.some(platform => game.platforms.map(p => p.toLowerCase()).includes(platform.toLowerCase()))
+            );
         }
         return [200, filteredGames];
     });
@@ -116,6 +123,25 @@ const setupApiMocks = () => {
         console.log('Updated user games:', games);
         return [200];
     });
+
+    mock.onPost('/user/game').reply(config => {
+        const token = config.headers?.Authorization;
+        console.log(`User token for post /user/game:`, token);
+
+        const {game} = JSON.parse(config.data);
+        console.log('Adding game:', game);
+        return [200, {message: 'Game added to favorites'}];
+    });
+
+    mock.onDelete(/\/user\/game\/.*/).reply(config => {
+        const token = config.headers?.Authorization;
+        console.log(`User token for delete /user/game/$name:`, token);
+
+        const gameName = config.url!.split('/').pop();
+        console.log('Removing game:', gameName);
+        return [200, {message: 'Game removed from favorites'}];
+    });
+
 
     return mock;
 };

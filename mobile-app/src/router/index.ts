@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import { getAuthToken } from '@/services/preferences';
 import MainPage from '@/views/MainPage.vue';
-import AuthPage from '@/views/AuthPage.vue';
-import OnboardingPage from "@/views/OnboardingPage.vue";
+//import AuthPage from '@/views/AuthPage.vue';
+//import OnboardingPage from "@/views/OnboardingPage.vue";
+//import GameDetailsPage from "@/views/GameDetailsPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
 /*  {
@@ -44,14 +45,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'home',
-        //component: () => import('@/views/HomePage.vue'),
-        component: () => import('@/views/Tab1Page.vue'),
+        component: () => import('@/views/HomePage.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'search',
         //component: () => import('@/views/SearchPage.vue'),
-        component: () => import('@/views/Tab2Page.vue'),
+        component: () => import('@/views/Tab1Page.vue'),
         meta: { requiresAuth: true }
       },
       {
@@ -64,12 +64,12 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/auth',
-    component: AuthPage,
+    component: () => import('@/views/AuthPage.vue'),
     meta: { requiresAuth: false }
   },
   {
     path: '/onboarding',
-    component: OnboardingPage,
+    component: () => import('@/views/OnboardingPage.vue'),
     meta: { requiresAuth: true },
     children: [
       {
@@ -87,6 +87,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { requiresAuth: true }
       }
     ]
+  },
+  {
+    path: '/details/:name',
+    name: 'GameDetails',
+    component: () => import ("@/views/GameDetailsPage.vue"),
+    meta: { requiresAuth: true }
   }
 ]
 

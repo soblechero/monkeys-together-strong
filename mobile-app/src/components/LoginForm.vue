@@ -14,7 +14,7 @@ import {IonButton, IonInput, IonText} from '@ionic/vue';
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {login} from '@/services/api';
-import handleError from '@/utils/handleError';
+import {handleError} from '@/utils';
 
 const email = ref('');
 const password = ref('');

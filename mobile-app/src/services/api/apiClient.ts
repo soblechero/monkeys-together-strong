@@ -1,5 +1,5 @@
 import axios, { AxiosRequestHeaders } from 'axios';
-import { getAuthToken, removeAuthToken } from '@/services/preferences';
+import {getAuthToken, removeAuthToken } from '@/services/preferences';
 import config from '@/config';
 import router from '@/router';
 

@@ -20,4 +20,4 @@ const isAxiosError = (error: any): error is AxiosError => {
     return error.isAxiosError === true;
 };
 
-export default handleApiError;
+export {handleApiError};

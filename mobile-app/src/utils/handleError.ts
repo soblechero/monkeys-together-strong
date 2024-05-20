@@ -1,4 +1,4 @@
-const handleError = (error: unknown, contextMessage: string): string => {
+export const handleError = (error: unknown, contextMessage: string): string => {
     console.error('Error:', error);
     if (error instanceof Error) {
         return error.message;
@@ -6,4 +6,3 @@ const handleError = (error: unknown, contextMessage: string): string => {
     return `${contextMessage} An error occurred. Please try again.`;
 };
 
-export default handleError;

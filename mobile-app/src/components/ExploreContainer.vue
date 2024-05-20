@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import config from '@/config';
 
-//const apiUrl = import.meta.env.VITE_API_BASE_URL;
 defineProps({
   name: String,
 });

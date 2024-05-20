@@ -13,8 +13,8 @@ export interface Game {
 export type GamesList = Game[];
 
 export interface GameSearchCriteria {
-    genre?: string;
-    name?: string;
-    releaseDate?: Date;
-    platform?: string;
+    genres?: string[];
+    names?: string[];
+    platforms?: string[];
+    releaseYears?: number[];
 }
