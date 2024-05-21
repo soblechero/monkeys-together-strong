@@ -41,15 +41,14 @@
           </swiper-slide>
         </swiper>
       </div>
+      <ion-toast
+          :is-open="toast.isOpen"
+          :message="toast.message"
+          :color="toast.color"
+          :duration="2000"
+          @did-dismiss="toast.isOpen = false"
+      ></ion-toast>
     </ion-content>
-
-    <ion-toast
-        :is-open="toast.isOpen"
-        :message="toast.message"
-        :color="toast.color"
-        :duration="2000"
-        @did-dismiss="toast.isOpen = false"
-    ></ion-toast>
   </ion-page>
 </template>
 
@@ -68,10 +67,10 @@ import {
 } from '@ionic/vue';
 import {ref, onMounted, computed} from 'vue';
 import {useRouter} from 'vue-router';
-import {getPreferenceGenres} from '@/services/preferences/genres';
-import {searchGames} from '@/services/api/games';
 import {Game} from '@/types';
-import {handleError} from '@/utils';
+import {getPreferenceGenres} from '@/services/preferences';
+import {searchGames} from '@/services/api';
+import {handleError, groupGamesByProvidedGenres, groupGamesByGameGenres} from '@/utils';
 import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Navigation, Pagination, FreeMode, Scrollbar, A11y} from 'swiper/modules';
 import 'swiper/css/bundle';
@@ -96,10 +95,11 @@ const fetchGames = async () => {
     const releaseYears = activeTag.value === 'new' ? [new Date().getFullYear()] : [];
     const gamesList = await searchGames(genres.value, [], releaseYears, []);
 
-    gamesByGenre.value = genres.value.reduce((acc, genre) => {
-      acc[genre] = gamesList.filter(game => game.genres.includes(genre));
-      return acc;
-    }, {} as Record<string, Game[]>);
+    if (genres.value.length > 0) {
+      gamesByGenre.value = groupGamesByProvidedGenres(gamesList, genres.value);
+    } else {
+      gamesByGenre.value = groupGamesByGameGenres(gamesList);
+    }
 
     chosenGame.value = gamesList[0]; // Suponiendo que el primer juego es el elegido
   } catch (error) {
@@ -107,6 +107,7 @@ const fetchGames = async () => {
     showToast(errorMessage, 'danger');
   }
 };
+
 
 const filteredGamesByGenre = computed(() => {
   return Object.fromEntries(Object.entries(gamesByGenre.value).filter(([, games]) => games.length > 0));
@@ -141,5 +142,3 @@ onIonViewWillEnter(() => {
 
 </script>
 
-<style scoped>
-</style>

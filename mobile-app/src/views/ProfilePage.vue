@@ -13,7 +13,7 @@
 
         <div class="flex space-x-2">
           <ion-chip :color="selectedTab === 'games' ? 'primary' : 'medium'" @click="selectedTab = 'games'">
-            <ion-label>Favorites</ion-label>
+            <ion-label>Games</ion-label>
           </ion-chip>
           <ion-chip :color="selectedTab === 'genres' ? 'primary' : 'medium'" @click="selectedTab = 'genres'">
             <ion-label>Genres</ion-label>
@@ -23,10 +23,20 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
       <div v-if="selectedTab === 'games'">
-        <GameList :games="favoriteGames" @update-favorites="updateFavorites" @show-toast="showToast"></GameList>
+        <div v-if="favoriteGames.length > 0">
+          <GameList :games="favoriteGames" @update-favorites="updateFavorites" @show-toast="showToast"></GameList>
+        </div>
+        <div v-else class="text-center text-base text-gray-500 mt-6">
+          <p>You haven't added any favorite games yet. Explore and add your first favorite game!</p>
+        </div>
       </div>
       <div v-else-if="selectedTab === 'genres'">
-        <GenreList :genres="favoriteGenres" @update-favorites="updateFavorites" @show-toast="showToast"></GenreList>
+        <div v-if="favoriteGenres.length > 0">
+          <GenreList :genres="favoriteGenres" @update-favorites="updateFavorites" @show-toast="showToast"></GenreList>
+        </div>
+        <div v-else class="text-center text-base text-gray-500 mt-6">
+          <p>You haven't added any favorite genres yet. Discover and add your favorite genres!</p>
+        </div>
       </div>
       <ion-toast
           :is-open="toast.isOpen"

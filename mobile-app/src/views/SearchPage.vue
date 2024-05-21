@@ -15,7 +15,7 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
       <div v-if="!searchQuery">
-        <h2 class="text-lg font-bold mt-4 pl-2">Your genres</h2>
+        <h2 v-if="yourGenres.length > 0" class="text-lg font-bold mt-4 pl-2">Your genres</h2>
         <ion-grid>
           <ion-row>
             <ion-col size="6" v-for="(genre, index) in yourGenres" :key="genre">

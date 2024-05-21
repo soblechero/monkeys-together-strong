@@ -2,16 +2,20 @@ import apiClient from './apiClient';
 import {Game, GameSearchCriteria, GamesList} from '@/types';
 import {setPreferenceGames, addGameToPreferences, removeGameFromPreferences} from '@/services/preferences';
 import {handleApiError} from '@/services/api';
-import {convertGamesList} from '@/utils/convertGameData';
+import {convertGamesList} from '@/utils/games';
 
 const getGames = async (): Promise<GamesList> => {
-    const response = await apiClient.get<GamesList>('/games');
-    return convertGamesList(response.data);
+    try {
+        const response = await apiClient.get<GamesList>('/games');
+        return convertGamesList(response.data);
+    } catch (error) {
+        throw handleApiError(error, 'Failed to get games.');
+    }
 };
 
 const searchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[]): Promise<GamesList> => {
     if (genres.length === 0 && names.length === 0 && releaseYears.length === 0 && platforms.length === 0) {
-        throw new Error('At least one search criteria must be provided.');
+        return getGames();
     }
 
     const criteria: GameSearchCriteria = {};
