@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Game 1",
+    "genres": ["Adventure"],
+    "thumb": "/path/to/thumb1.jpg",
+    "artwork": "/path/to/artwork1.jpg",
+    "howLongToBeat": 10,
+    "rating": 4.5,
+    "releaseDate": "2020-01-01",
+    "summary": "Summary of Game 1",
+    "platforms": ["PC"]
+  },
+  {
+    "name": "Game 2",
+    "genres": ["Shooter"],
+    "thumb": "/path/to/thumb2.jpg",
+    "artwork": "/path/to/artwork2.jpg",
+    "howLongToBeat": 15,
+    "rating": 4.7,
+    "releaseDate": "2021-05-20",
+    "summary": "Summary of Game 2",
+    "platforms": ["PC", "PS5"]
+  }
+]

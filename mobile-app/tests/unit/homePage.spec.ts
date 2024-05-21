@@ -5,6 +5,6 @@ import {describe, expect, test} from 'vitest'
 describe('HomePage.vue', () => {
     test('renders tab Home HomePage', () => {
         const wrapper = mount(HomePage)
-        expect(wrapper.text()).toMatch('Home page')
+        expect(wrapper.text()).toMatch('All')
     })
 })
