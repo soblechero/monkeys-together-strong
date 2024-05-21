@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSignup" class="relative ion-padding">
+  <form @submit.prevent="handleSignup" class="relative ion-padding-horizontal">
       <ion-input type="text" fill="outline" placeholder="Username" v-model="username" required
                  class="mt-4 border-b border-gray-300 rounded-md" label="Username" label-placement="floating"/>
       <ion-input type="email" fill="outline" placeholder="Email" v-model="email" required

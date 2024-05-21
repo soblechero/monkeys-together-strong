@@ -1,5 +1,11 @@
-import axios, { AxiosRequestHeaders } from 'axios';
-import {getAuthToken, removeAuthToken } from '@/services/preferences';
+/**
+ * Configuración del cliente Axios para manejar solicitudes HTTP con autenticación.
+ * Este cliente agrega automáticamente el token de autenticación a las solicitudes
+ * y maneja respuestas con errores de autenticación redirigiendo al usuario a la
+ * página de inicio.
+ */
+import axios, {AxiosRequestHeaders} from 'axios';
+import {getAuthToken, removeAuthToken} from '@/services/preferences';
 import config from '@/config';
 import router from '@/router';
 

@@ -1,4 +1,4 @@
-import { User } from '@/types';
+import {User} from '@/types';
 
 describe('Signup', () => {
     beforeEach(() => {
@@ -16,7 +16,7 @@ describe('Signup', () => {
 
         cy.intercept('POST', '/signup', {
             statusCode: 201,
-            body: { access_token: newUser.access_token }
+            body: {access_token: newUser.access_token}
         }).as('signupRequest');
 
         cy.visit('/auth');
@@ -36,7 +36,7 @@ describe('Signup', () => {
 
         cy.intercept('POST', '/signup', {
             statusCode: 400,
-            body: { message: this.errorData.user_already_exists }
+            body: {message: this.errorData.user_already_exists}
         }).as('signupRequest');
 
         cy.visit('/auth');

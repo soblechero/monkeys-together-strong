@@ -1,4 +1,4 @@
-import { User } from '@/types';
+import {User} from '@/types';
 
 describe('Login', () => {
     beforeEach(() => {
@@ -12,7 +12,7 @@ describe('Login', () => {
 
         cy.intercept('POST', '/login', {
             statusCode: 200,
-            body: { access_token: validUser.access_token }
+            body: {access_token: validUser.access_token}
         }).as('loginRequest');
 
         cy.visit('/auth');
@@ -27,7 +27,7 @@ describe('Login', () => {
     it('debería fallar el inicio de sesión con credenciales inválidas', function () {
         cy.intercept('POST', '/login', {
             statusCode: 401,
-            body: { message: this.errorData.invalid_credentials }
+            body: {message: this.errorData.invalid_credentials}
         }).as('loginRequest');
 
         cy.visit('/auth');
