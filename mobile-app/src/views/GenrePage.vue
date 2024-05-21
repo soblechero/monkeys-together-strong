@@ -6,8 +6,8 @@
           <ion-back-button></ion-back-button>
         </ion-buttons>
       </ion-toolbar>
-      <ion-toolbar class="ion-padding-horizontal">
-        <ion-title class="text-xl font-bold">#{{ genreName }}</ion-title>
+      <ion-toolbar class="flex justify-between items-center pr-4">
+          <ion-title slot="start" class="text-xl font-bold text-left">#{{ genreName }}</ion-title>
         <ion-button @click="toggleFavorite" slot="end" fill="clear" shape="round">
           <ion-icon :icon="isFavorite ? checkmarkCircle : addCircle" slot="icon-only" size="large" color="primary"/>
         </ion-button>

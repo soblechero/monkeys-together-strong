@@ -2,9 +2,6 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import { getAuthToken } from '@/services/preferences';
 import MainPage from '@/views/MainPage.vue';
-//import AuthPage from '@/views/AuthPage.vue';
-//import OnboardingPage from "@/views/OnboardingPage.vue";
-//import GameDetailsPage from "@/views/GameDetailsPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -28,8 +25,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'profile',
-        //component: () => import('@/views/ProfilePage.vue'),
-        component: () => import('@/views/Tab1Page.vue'),
+        component: () => import('@/views/ProfilePage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/genre/:name',
+        name: 'GenrePage',
+        component: () => import ("@/views/GenrePage.vue"),
         meta: { requiresAuth: true }
       }
     ]
@@ -66,12 +68,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import ("@/views/GameDetailsPage.vue"),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/genre/:name',
-    name: 'GenrePage',
-    component: () => import ("@/views/GenrePage.vue"),
-    meta: { requiresAuth: true }
-  }
 ]
 
 const router = createRouter({

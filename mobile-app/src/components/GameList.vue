@@ -1,40 +1,85 @@
 <template>
   <ion-list lines="full">
-    <ion-item
-        v-for="game in games"
-        :key="game.name"
-        button
-        @click="goToGameDetails(game.name)"
-        class="hover:bg-gray-100 transition"
-    >
-      <ion-thumbnail slot="start" class="w-24 h-max">
-        <img :src="game.thumb" :alt="game.name" class="w-full h-full"/>
-      </ion-thumbnail>
-      <ion-label>
-        <h2 class="font-extrabold">{{ game.name }}</h2>
-        <p class="text-sm">{{ game.summary }}</p>
-      </ion-label>
-    </ion-item>
+    <ion-item-sliding v-for="game in games" :key="game.name">
+      <ion-item @click="goToGamePage(game)" class="hover:bg-gray-100 transition" button>
+        <ion-thumbnail slot="start">
+          <img :src="game.thumb" :alt="game.name"/>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>{{ game.name }}</h3>
+          <p>{{ game.summary }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option @click="toggleFavorite(game)" :color="isFavorite(game.name) ? 'danger' : 'success'">
+          <ion-icon :icon="isFavorite(game.name) ? removeCircle : addCircle" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 </template>
 
 <script setup lang="ts">
 import {
   IonList,
+  IonItemSliding,
   IonItem,
+  IonLabel,
   IonThumbnail,
-  IonLabel
+  IonItemOptions,
+  IonItemOption,
+  IonIcon
 } from '@ionic/vue';
+import {addCircle, removeCircle} from 'ionicons/icons';
+import {defineEmits, ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
+import {addGameToFavorites, removeGameFromFavorites} from '@/services/api/games';
+import {getPreferenceGames} from '@/services/preferences/games';
 import {Game} from '@/types';
+import {handleError} from '@/utils';
 
 defineProps<{
   games: Game[];
 }>();
 
-const router = useRouter();
+const emit = defineEmits(['update-favorites', 'show-toast']);
 
-const goToGameDetails = (name: string) => {
-  router.push({name: 'GameDetails', params: {name}});
+const router = useRouter();
+const favorites = ref<string[]>([]);
+
+const fetchFavorites = async () => {
+  try {
+    favorites.value = await getPreferenceGames();
+  } catch (error) {
+    console.error('Failed to fetch favorite games:', error);
+  }
 };
+
+const goToGamePage = (game: Game) => {
+  router.push({name: 'GameDetails', params: {name: game.name}});
+};
+
+const toggleFavorite = async (game: Game) => {
+  try {
+    if (isFavorite(game.name)) {
+      await removeGameFromFavorites(game.name);
+      favorites.value = favorites.value.filter(fav => fav !== game.name);
+    } else {
+      await addGameToFavorites(game.name);
+      favorites.value.push(game.name);
+    }
+    emit('update-favorites');
+  } catch (error) {
+    const errorMessage = handleError(error, 'Failed to update favorites.');
+    emit('show-toast', errorMessage, 'danger');
+  }
+};
+
+const isFavorite = (gameName: string) => {
+  return favorites.value.includes(gameName);
+};
+
+onMounted(() => {
+  fetchFavorites();
+});
 </script>

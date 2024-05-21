@@ -11,7 +11,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
-      <div class="ion-padding-top relative" >
+      <div class="ion-padding-top relative">
         <h2 class="text-lg font-bold pl-1">Chosen for you</h2>
         <ion-card class="h-36 object-cover rounded-lg" @click="goToGameDetails(chosenGame?.name)">
           <img :src="chosenGame?.artwork" alt="Chosen game" class="w-full rounded-lg"/>
@@ -63,7 +63,8 @@ import {
   IonLabel,
   IonCard,
   IonToast,
-  IonCardContent
+  IonCardContent,
+  onIonViewWillEnter
 } from '@ionic/vue';
 import {ref, onMounted, computed} from 'vue';
 import {useRouter} from 'vue-router';
@@ -133,6 +134,11 @@ const showToast = (message: string, color: string) => {
 onMounted(() => {
   fetchGames();
 });
+
+onIonViewWillEnter(() => {
+  fetchGames();
+});
+
 </script>
 
 <style scoped>

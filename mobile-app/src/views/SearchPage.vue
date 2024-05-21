@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true" class="ion-no-border">
       <ion-toolbar class="ion-padding-top ion-padding-horizontal">
-        <ion-searchbar v-model="searchQuery" @ionInput="onSearch" :debounce="500"></ion-searchbar>
+        <ion-searchbar v-model="searchQuery" @ionInput="onSearch" :debounce="500" class="mt-2"></ion-searchbar>
         <div v-if="searchQuery">
           <ion-chip :color="searchType === 'game' ? 'primary' : 'medium'" @click="selectSearchType('game')">
             <ion-label>Game</ion-label>
@@ -72,7 +72,8 @@ import {
   IonChip,
   IonLabel,
   IonToast,
-  IonIcon
+  IonIcon,
+  onIonViewWillEnter
 } from '@ionic/vue';
 import {pricetag} from 'ionicons/icons';
 import {ref, computed, onMounted} from 'vue';
@@ -157,6 +158,10 @@ const showToast = (message: string, color: string) => {
 };
 
 onMounted(() => {
+  loadGenres();
+});
+
+onIonViewWillEnter(() => {
   loadGenres();
 });
 </script>
