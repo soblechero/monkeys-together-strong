@@ -62,6 +62,13 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
    ```sh
    npx cap run android
    ```
+#### Alternativa
+Se puede utilizar un solo comando de Ionic CLI que combina los pasos anteriores: construcción, sincronización y apertura en Android Studio:
+
+1. **Ejecutar el comando de Ionic CLI**:
+   ```sh
+   ionic capacitor build android
+   ```
 
 ### Navegador
 - **Ejecutar el Servidor de Desarrollo Local**:
