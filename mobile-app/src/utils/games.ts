@@ -3,7 +3,7 @@ import {Game} from '@/types';
 export const games = (data: any): Game => {
     return {
         ...data,
-        releaseDate: new Date(data.releaseDate), // Asegura que releaseDate sea un objeto Date
+        releaseDate: new Date(data.releaseDate),
     };
 };
 

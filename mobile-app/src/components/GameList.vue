@@ -2,8 +2,8 @@
   <ion-list lines="full">
     <ion-item-sliding v-for="game in games" :key="game.name">
       <ion-item @click="goToGamePage(game)" class="hover:bg-gray-100 transition" button>
-        <ion-thumbnail slot="start">
-          <img :src="game.thumb" :alt="game.name"/>
+        <ion-thumbnail slot="start" class="w-24 h-max">
+          <img :src="game.thumb" :alt="game.name" class="object-cover w-full h-full"/>
         </ion-thumbnail>
         <ion-label>
           <h3>{{ game.name }}</h3>

@@ -9,7 +9,7 @@ const games: GamesList = convertGamesList(gamesData);
 const genres: string[] = genresData as string[];
 
 const setupApiMocks = () => {
-    const mock = new MockAdapter(apiClient, {delayResponse: 500});
+    const mock = new MockAdapter(apiClient, {delayResponse: 300});
 
     console.log('Mock API setup initialized');
 
