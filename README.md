@@ -32,7 +32,8 @@ npm install -g @ionic/cli@latest native-run@latest
    npm install
    ```
 
-- **Configurar Variables de Entorno en Windows**:
+- **Configurar Variables de Entorno en Windows**: 
+
 Estas variables son necesarias para que las herramientas de desarrollo localicen el SDK de Android y ejecuten Android Studio y el emulador correctamente:
 
    - **ANDROID_HOME**: Apunta al directorio del SDK de Android. Necesario para que las herramientas de desarrollo como Gradle encuentren las herramientas del SDK.
