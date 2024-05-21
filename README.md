@@ -3,9 +3,9 @@ Aplicación móvil desarrollada con Ionic
 
 ## Estructura del Proyecto
 - **mobile-app/**: Código fuente de la aplicación móvil.
+  - **test/**: Tests unitarios y de integración e2e.
   - **android/**: Código autogenerado para Android.
   - **ios/**: Código autogenerado para iOS.
-  - **dist/**: Directorio de salida de los archivos estáticos compilados.
 
 - **backend/**: Código del backend.
 
