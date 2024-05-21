@@ -31,14 +31,14 @@ import {
   IonIcon
 } from '@ionic/vue';
 import {addCircle, removeCircle} from 'ionicons/icons';
-import {defineEmits, ref, onMounted} from 'vue';
+import {ref, onMounted, watch} from 'vue';
 import {useRouter} from 'vue-router';
 import {addGameToFavorites, removeGameFromFavorites} from '@/services/api/games';
 import {getPreferenceGames} from '@/services/preferences/games';
 import {Game} from '@/types';
 import {handleError} from '@/utils';
 
-defineProps<{
+const props = defineProps<{
   games: Game[];
 }>();
 
@@ -82,4 +82,9 @@ const isFavorite = (gameName: string) => {
 onMounted(() => {
   fetchFavorites();
 });
+
+watch(() => props.games, () => {
+  fetchFavorites();
+});
+
 </script>

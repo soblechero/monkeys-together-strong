@@ -1,11 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import {apiClient} from '@/services/api';
-import {errors, users as usersData, genres, games as gamesData} from '@/mocks';
-import {ApiError, AuthResponse, User, GenresList, GamesList, GameSearchCriteria} from '@/types';
+import {errors, users as usersData, genres as genresData, games as gamesData} from '@/mocks';
+import {ApiError, AuthResponse, User, GamesList, GameSearchCriteria} from '@/types';
 import {convertGamesList} from "@/utils";
 
 const users: User[] = usersData as User[];
 const games: GamesList = convertGamesList(gamesData);
+const genres: string[] = genresData as string[];
 
 const setupApiMocks = () => {
     const mock = new MockAdapter(apiClient, {delayResponse: 500});
@@ -50,13 +51,13 @@ const setupApiMocks = () => {
         }
     });
 
-    mock.onGet('/genres').reply(200, {genres: genres} as GenresList);
+    mock.onGet('/genres').reply(200, genres);
 
     mock.onGet('/user/genres').reply((config) => {
         const token = config.headers?.Authorization;
         console.log('User token for get /user/genres:', token);
 
-        const userGenres: GenresList = {genres: ['Adventure', 'Shooter']};
+        const userGenres = ['Adventure', 'Shooter'];
         return [200, userGenres];
     });
 
@@ -64,7 +65,7 @@ const setupApiMocks = () => {
         const token = config.headers?.Authorization;
         console.log('User token for post /user/genres:', token);
 
-        const {genres}: GenresList = JSON.parse(config.data);
+        const {genres} = JSON.parse(config.data);
         console.log(`Updated user genres for token ${token}:`, genres);
         return [200, {message: 'Genres updated successfully'}];
     });

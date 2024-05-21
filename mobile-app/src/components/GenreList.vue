@@ -16,15 +16,23 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, ref, onMounted} from 'vue';
-import {useRouter} from 'vue-router';
-import {IonList, IonItemSliding, IonItem, IonLabel, IonItemOptions, IonItemOption, IonIcon} from '@ionic/vue';
+import {
+  IonList,
+  IonItemSliding,
+  IonItem,
+  IonLabel,
+  IonItemOptions,
+  IonItemOption,
+  IonIcon
+} from '@ionic/vue';
 import {addCircle, removeCircle} from 'ionicons/icons';
+import {ref, onMounted, watch} from 'vue';
+import {useRouter} from 'vue-router';
 import {addGenreToFavorites, removeGenreFromFavorites} from '@/services/api';
 import {getPreferenceGenres} from '@/services/preferences';
 import {handleError} from '@/utils';
 
-defineProps<{
+const props = defineProps<{
   genres: string[];
 }>();
 
@@ -68,4 +76,9 @@ const isFavorite = (genre: string) => {
 onMounted(() => {
   fetchFavorites();
 });
+
+watch(() => props.genres, () => {
+  fetchFavorites();
+});
+
 </script>
