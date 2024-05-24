@@ -14,7 +14,6 @@ Aplicación móvil desarrollada con Ionic
 ## Requisitos Previos
 - Node.js y npm
 - Ionic CLI
-- Capacitor CLI
 - Android Studio
 
 ### Instalación de Dependencias Globales
@@ -40,7 +39,7 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
      ```
      C:\Users\Usuario\AppData\Local\Android\Sdk
      ```
-   - **CAPACITOR_ANDROID_STUDIO_PATH**: Ruta al ejecutable de Android Studio. Necesario para abrir Android Studio desde la línea de comandos con Ionic CLI.
+   - **CAPACITOR_ANDROID_STUDIO_PATH**: Ruta al ejecutable de Android Studio. Necesario para abrir Android Studio desde la línea de comandos con Ionic/Capacitor CLI.
      ```
      C:\Users\Usuario\AppData\Local\Programs\Android Studio\bin\studio64.exe
      ```

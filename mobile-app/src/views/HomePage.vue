@@ -69,7 +69,7 @@ import {ref, onMounted, computed} from 'vue';
 import {useRouter} from 'vue-router';
 import {Game} from '@/types';
 import {getPreferenceGenres} from '@/services/preferences';
-import {searchGames} from '@/services/api';
+import {fetchGames} from '@/services/api';
 import {handleError, groupGamesByProvidedGenres, groupGamesByGameGenres} from '@/utils';
 import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Navigation, Pagination, FreeMode, Scrollbar, A11y} from 'swiper/modules';
@@ -89,11 +89,11 @@ const toast = ref({
 
 const router = useRouter();
 
-const fetchGames = async () => {
+const loadGames = async () => {
   try {
     genres.value = await getPreferenceGenres();
     const releaseYears = activeTag.value === 'new' ? [new Date().getFullYear()] : [];
-    const gamesList = await searchGames(genres.value, [], releaseYears, []);
+    const gamesList = await fetchGames(genres.value, [], releaseYears, []);
 
     if (genres.value.length > 0) {
       gamesByGenre.value = groupGamesByProvidedGenres(gamesList, genres.value);
@@ -115,7 +115,7 @@ const filteredGamesByGenre = computed(() => {
 
 const tagChanged = (value: string) => {
   activeTag.value = value;
-  fetchGames();
+  loadGames();
 };
 
 const goToGameDetails = (gameName: string | undefined) => {
@@ -133,11 +133,11 @@ const showToast = (message: string, color: string) => {
 };
 
 onMounted(() => {
-  fetchGames();
+  loadGames();
 });
 
 onIonViewWillEnter(() => {
-  fetchGames();
+  loadGames();
 });
 
 </script>

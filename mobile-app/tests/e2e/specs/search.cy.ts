@@ -16,7 +16,7 @@ describe('SearchPage', () => {
         }).as('getGenres');
 
         cy.visit('/search');
-        cy.wait('@getGenres');
+        cy.wait('@fetchGenres');
 
         genres.forEach(genre => {
             cy.contains(genre).should('be.visible');
@@ -31,7 +31,7 @@ describe('SearchPage', () => {
         cy.get('ion-searchbar input').type(searchQuery);
         cy.contains('Games').click();
 
-        cy.wait('@searchGames');
+        cy.wait('@fetchGames');
         cy.contains(games[0].name).should('be.visible');
     });
 });

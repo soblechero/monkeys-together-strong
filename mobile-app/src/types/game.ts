@@ -17,4 +17,6 @@ export interface GameSearchCriteria {
     names?: string[];
     platforms?: string[];
     releaseYears?: number[];
+    limit?: number;
+    offset?: number;
 }

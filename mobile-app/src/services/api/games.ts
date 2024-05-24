@@ -4,20 +4,7 @@ import {setPreferenceGames, addGameToPreferences, removeGameFromPreferences} fro
 import {handleApiError} from '@/services/api';
 import {convertGamesList} from '@/utils/games';
 
-const getGames = async (): Promise<GamesList> => {
-    try {
-        const response = await apiClient.get<GamesList>('/games');
-        return convertGamesList(response.data);
-    } catch (error) {
-        throw handleApiError(error, 'Failed to get games.');
-    }
-};
-
-const searchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[]): Promise<GamesList> => {
-    if (genres.length === 0 && names.length === 0 && releaseYears.length === 0 && platforms.length === 0) {
-        return getGames();
-    }
-
+const fetchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[]): Promise<GamesList> => {
     const criteria: GameSearchCriteria = {};
     if (genres && genres.length > 0) criteria.genres = genres;
     if (names && names.length > 0) criteria.names = names;
@@ -25,31 +12,31 @@ const searchGames = async (genres: string[], names: string[], releaseYears: numb
     if (platforms && platforms.length > 0) criteria.platforms = platforms;
 
     try {
-        const response = await apiClient.get<GamesList>('/games/search', {params: criteria});
+        const response = await apiClient.get<GamesList>('/games', {params: criteria});
         return convertGamesList(response.data);
     } catch (error) {
         throw handleApiError(error, 'Failed to search games.');
     }
 };
 
-const getUserGames = async (): Promise<GamesList> => {
+const fetchFavoriteGames = async (): Promise<GamesList> => {
     const response = await apiClient.get<GamesList>('/user/games');
     return convertGamesList(response.data);
 };
 
-const updateUserGames = async (gameNames: string[]): Promise<void> => {
+const creteOrUpdateFavoriteGames = async (gameNames: string[]): Promise<void> => {
     try {
-        await apiClient.post('/user/games', {games: gameNames});
-        await setPreferenceGames(gameNames); // Actualiza las preferencias locales
+        await apiClient.put('/user/games', {games: gameNames});
+        await setPreferenceGames(gameNames);
     } catch (error) {
         throw handleApiError(error, 'Failed to update user games.');
     }
 };
 
-const addGameToFavorites = async (name: string): Promise<void> => {
+const addGameToFavorites = async (gameName: string): Promise<void> => {
     try {
-        await apiClient.post('/user/game', {game: name});
-        await addGameToPreferences(name);
+        await apiClient.post('/user/games', {game: gameName});
+        await addGameToPreferences(gameName);
     } catch (error) {
         throw handleApiError(error, 'Failed to add game to favorites.');
     }
@@ -57,33 +44,32 @@ const addGameToFavorites = async (name: string): Promise<void> => {
 
 const removeGameFromFavorites = async (name: string): Promise<void> => {
     try {
-        await apiClient.delete(`/user/game/${name}`);
+        await apiClient.delete(`/user/games/${name}`);
         await removeGameFromPreferences(name);
     } catch (error) {
         throw handleApiError(error, 'Failed to remove game from favorites.');
     }
 };
 
-const getGameDetails = async (name: string): Promise<Game> => {
-    const games = await searchGames([], [name], [], []);
+const fetchGameDetails = async (name: string): Promise<Game> => {
+    const games = await fetchGames([], [name], [], []);
     if (games.length === 0) {
         throw new Error('Game not found');
     }
     return games[0];
 };
 
-const getSimilarGames = async (genres: string[]): Promise<Game[]> => {
-    return await searchGames(genres, [], [], []);
+const fetchSimilarGames = async (genres: string[]): Promise<Game[]> => {
+    return await fetchGames(genres, [], [], []);
 };
 
 
 export {
-    getGames,
-    searchGames,
-    getUserGames,
-    updateUserGames,
+    fetchGames,
+    fetchFavoriteGames,
+    creteOrUpdateFavoriteGames,
     addGameToFavorites,
     removeGameFromFavorites,
-    getGameDetails,
-    getSimilarGames
+    fetchGameDetails,
+    fetchSimilarGames
 };

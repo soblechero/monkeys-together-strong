@@ -65,7 +65,7 @@ import {ref, onMounted} from 'vue';
 import GameList from '@/components/GameList.vue';
 import GenreList from '@/components/GenreList.vue';
 import {getPreferenceGames, getPreferenceGenres, getUserEmailFromPreferences} from '@/services/preferences';
-import {searchGames} from '@/services/api';
+import {fetchGames} from '@/services/api';
 import {Game} from '@/types';
 import {handleError} from '@/utils';
 
@@ -92,7 +92,7 @@ const loadFavoriteGames = async () => {
   try {
     const gameNames = await getPreferenceGames();
     if (gameNames.length > 0) {
-      favoriteGames.value = await searchGames([], gameNames, [], []);
+      favoriteGames.value = await fetchGames([], gameNames, [], []);
     } else {
       favoriteGames.value = [];
     }

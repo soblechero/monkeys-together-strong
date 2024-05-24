@@ -57,7 +57,7 @@ import {
 import {chevronForward} from 'ionicons/icons';
 import {ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
-import {getGenres, updateUserGenres} from '@/services/api';
+import {fetchGenres, creteOrUpdateFavoriteGenres} from '@/services/api';
 import {getPreferenceGenres, setPreferenceGenres} from '@/services/preferences';
 import {handleError} from '@/utils';
 
@@ -72,7 +72,7 @@ const toast = ref({
 
 const loadGenres = async () => {
   try {
-    genres.value = await getGenres();
+    genres.value = await fetchGenres();
     selectedGenres.value = await getPreferenceGenres();
   } catch (error) {
     const errorMessage = handleError(error, 'Failed to load genres.');
@@ -95,7 +95,7 @@ const skip = async () => {
 
 const next = async () => {
   try {
-    await updateUserGenres(selectedGenres.value);
+    await creteOrUpdateFavoriteGenres(selectedGenres.value);
     await router.push('/onboarding/get-started');
   } catch (error) {
     const errorMessage = handleError(error, 'Failed to update genres.');

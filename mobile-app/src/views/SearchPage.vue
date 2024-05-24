@@ -80,7 +80,7 @@ import {ref, computed, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 import GameList from '@/components/GameList.vue';
 import {Game} from '@/types';
-import {searchGames, getGenres} from '@/services/api';
+import {fetchGames, fetchGenres} from '@/services/api';
 import {getPreferenceGenres} from '@/services/preferences';
 import {handleError} from '@/utils';
 
@@ -102,9 +102,9 @@ const onSearch = async () => {
   if (searchQuery.value.trim()) {
     try {
       if (searchType.value === 'game') {
-        filteredGames.value = await searchGames([], [searchQuery.value], [], []);
+        filteredGames.value = await fetchGames([], [searchQuery.value], [], []);
       } else {
-        filteredGames.value = await searchGames([searchQuery.value], [], [], []);
+        filteredGames.value = await fetchGames([searchQuery.value], [], [], []);
       }
     } catch (error) {
       const errorMessage = handleError(error, 'Failed to search games.');
@@ -121,7 +121,7 @@ const selectSearchType = (type: 'game' | 'genre') => {
 const loadGenres = async () => {
   try {
     yourGenres.value = await getPreferenceGenres();
-    allGenres.value = await getGenres();
+    allGenres.value = await fetchGenres();
   } catch (error) {
     const errorMessage = handleError(error, 'Failed to load genres.');
     showToast(errorMessage, 'danger');

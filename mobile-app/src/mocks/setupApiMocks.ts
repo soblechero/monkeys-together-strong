@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import {apiClient} from '@/services/api';
+import apiClient from '@/services/api/apiClient';
 import {errors, users as usersData, genres as genresData, games as gamesData} from '@/mocks';
 import {ApiError, AuthResponse, User, GamesList, GameSearchCriteria} from '@/types';
 import {convertGamesList} from "@/utils";
@@ -61,18 +61,55 @@ const setupApiMocks = () => {
         return [200, userGenres];
     });
 
-    mock.onPost('/user/genres').reply((config) => {
+    mock.onPut('/user/genres').reply(async config => {
+        const token = config.headers?.Authorization;
+        console.log('User token for put /user/genres:', token);
+
+        try {
+            const data = JSON.parse(config.data);
+
+            if (data.genres) {
+                console.log('Creating or updating user genres:', data.genres);
+                return [200, {message: 'Genres created/updated successfully'}];
+            } else {
+                return [400, {message: 'Invalid request body'}];
+            }
+        } catch (error) {
+            return [400, {message: 'Invalid JSON'}];
+        }
+    });
+
+    mock.onPost('/user/genres').reply(async config => {
         const token = config.headers?.Authorization;
         console.log('User token for post /user/genres:', token);
 
-        const {genres} = JSON.parse(config.data);
-        console.log(`Updated user genres for token ${token}:`, genres);
-        return [200, {message: 'Genres updated successfully'}];
+        try {
+            const data = JSON.parse(config.data);
+
+            if (data.genre) {
+                console.log('Adding genre:', data.genre);
+                return [200, {message: 'Genre added to favorites'}];
+            } else {
+                return [400, {message: 'Invalid request body'}];
+            }
+        } catch (error) {
+            console.error('Error parsing request data:', error);
+            return [400, {message: 'Invalid JSON'}];
+        }
     });
 
-    mock.onGet('/games').reply(200, games as GamesList);
+    mock.onDelete(/\/user\/genres\/.*/).reply(config => {
+        const token = config.headers?.Authorization;
+        console.log(`User token for delete /user/genre/$name:`, token);
 
-    mock.onGet('/games/search').reply(config => {
+        const genreName = config.url!.split('/').pop();
+        console.log('Removing genre:', genreName);
+        return [200, {message: 'Game removed from favorites'}];
+    });
+
+    //mock.onGet('/games').reply<GamesList>(200, games as GamesList);
+
+    mock.onGet('/games').reply<GamesList>(config => {
         const params: GameSearchCriteria = config.params;
         let filteredGames: GamesList = games;
         if (params.genres && params.genres.length > 0) {
@@ -111,6 +148,29 @@ const setupApiMocks = () => {
         return [200, userGames];
     });
 
+    mock.onPut('/user/games').reply(async config => {
+        const token = config.headers?.Authorization;
+        console.log('User token for put /user/games:', token);
+
+        // const {value} = await getAuthToken();
+        // if (token !== `Bearer ${value}`) {
+        //     return [401, {message: 'Invalid token'}];
+        // }
+
+        try {
+            const data = JSON.parse(config.data);
+
+            if (data.games) {
+                console.log('Creating or updating user games:', data.games);
+                return [200, {message: 'Games created/updated successfully'}];
+            } else {
+                return [400, {message: 'Invalid request body'}];
+            }
+        } catch (error) {
+            return [400, {message: 'Invalid JSON'}];
+        }
+    });
+
     mock.onPost('/user/games').reply(async config => {
         const token = config.headers?.Authorization;
         console.log('User token for post /user/games:', token);
@@ -120,45 +180,27 @@ const setupApiMocks = () => {
         //     return [401, {message: 'Invalid token'}];
         // }
 
-        const {games} = JSON.parse(config.data);
-        console.log('Updated user games:', games);
-        return [200];
+        try {
+            const data = JSON.parse(config.data);
+
+            if (data.game) {
+                console.log('Adding game:', data.game);
+                return [200, {message: 'Game added to favorites'}];
+            } else {
+                return [400, {message: 'Invalid request body'}];
+            }
+        } catch (error) {
+            console.error('Error parsing request data:', error);
+            return [400, {message: 'Invalid JSON'}];
+        }
     });
 
-    mock.onPost('/user/game').reply(config => {
+    mock.onDelete(/\/user\/games\/.*/).reply(config => {
         const token = config.headers?.Authorization;
-        console.log(`User token for post /user/game:`, token);
-
-        const {game} = JSON.parse(config.data);
-        console.log('Adding game:', game);
-        return [200, {message: 'Game added to favorites'}];
-    });
-
-    mock.onDelete(/\/user\/game\/.*/).reply(config => {
-        const token = config.headers?.Authorization;
-        console.log(`User token for delete /user/game/$name:`, token);
+        console.log(`User token for delete /user/games/$name:`, token);
 
         const gameName = config.url!.split('/').pop();
         console.log('Removing game:', gameName);
-        return [200, {message: 'Game removed from favorites'}];
-    });
-
-
-    mock.onPost('/user/genre').reply(config => {
-        const token = config.headers?.Authorization;
-        console.log(`User token for post /user/genre:`, token);
-
-        const {genre} = JSON.parse(config.data);
-        console.log('Adding genre:', genre);
-        return [200, {message: 'Genre added to favorites'}];
-    });
-
-    mock.onDelete(/\/user\/genre\/.*/).reply(config => {
-        const token = config.headers?.Authorization;
-        console.log(`User token for delete /user/genre/$name:`, token);
-
-        const genreName = config.url!.split('/').pop();
-        console.log('Removing genre:', genreName);
         return [200, {message: 'Game removed from favorites'}];
     });
 

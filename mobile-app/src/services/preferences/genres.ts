@@ -15,6 +15,11 @@ const clearPreferenceGenres = async (): Promise<void> => {
     await Preferences.remove({key: FAVORITE_GENRES_KEY});
 };
 
+const isGenreInPreferences = async (genre: string): Promise<boolean> => {
+    const favoriteGenres = await getPreferenceGenres();
+    return favoriteGenres.includes(genre);
+};
+
 const addGenreToPreferences = async (genre: string): Promise<void> => {
     const genres = await getPreferenceGenres();
     if (!await isGenreInPreferences(genre)) {
@@ -31,17 +36,12 @@ const removeGenreFromPreferences = async (genre: string): Promise<void> => {
     }
 };
 
-const isGenreInPreferences = async (genre: string): Promise<boolean> => {
-    const favoriteGenres = await getPreferenceGenres();
-    return favoriteGenres.includes(genre);
-};
-
 
 export {
     getPreferenceGenres,
     setPreferenceGenres,
     clearPreferenceGenres,
+    isGenreInPreferences,
     addGenreToPreferences,
-    removeGenreFromPreferences,
-    isGenreInPreferences
+    removeGenreFromPreferences
 };

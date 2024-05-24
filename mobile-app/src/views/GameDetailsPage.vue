@@ -78,7 +78,7 @@ import {ref, onMounted} from 'vue';
 import {useRoute} from 'vue-router';
 import GameList from '@/components/GameList.vue';
 import {Game} from '@/types';
-import {getGameDetails, getSimilarGames, addGameToFavorites, removeGameFromFavorites} from '@/services/api/games';
+import {fetchGameDetails, fetchSimilarGames, addGameToFavorites, removeGameFromFavorites} from '@/services/api/games';
 import {isGameInPreferences} from "@/services/preferences";
 import {handleError} from '@/utils';
 
@@ -93,10 +93,10 @@ const toast = ref({
   color: ''
 });
 
-const fetchGameDetails = async () => {
+const loadGameDetails = async () => {
   try {
-    game.value = await getGameDetails(gameName);
-    const similarGamesList = await getSimilarGames(game.value.genres);
+    game.value = await fetchGameDetails(gameName);
+    const similarGamesList = await fetchSimilarGames(game.value.genres);
     similarGames.value = similarGamesList.filter(similarGame => similarGame.name !== gameName);
     isFavorite.value = await isGameInPreferences(gameName);
   } catch (error) {
@@ -128,7 +128,7 @@ const showToast = (message: string, color: string) => {
 };
 
 onMounted(() => {
-  fetchGameDetails();
+  loadGameDetails();
 });
 </script>
 

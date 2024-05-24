@@ -7,7 +7,7 @@
         </ion-buttons>
       </ion-toolbar>
       <ion-toolbar class="flex justify-between items-center pr-4">
-          <ion-title slot="start" class="text-xl font-bold text-left">#{{ genreName }}</ion-title>
+        <ion-title slot="start" class="text-xl font-bold text-left">#{{ genreName }}</ion-title>
         <ion-button @click="toggleFavorite" slot="end" fill="clear" shape="round">
           <ion-icon :icon="isFavorite ? checkmarkCircle : addCircle" slot="icon-only" size="large" color="primary"/>
         </ion-button>
@@ -27,8 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
-import {useRoute} from 'vue-router';
 import {
   IonPage,
   IonHeader,
@@ -42,9 +40,11 @@ import {
   IonToast
 } from '@ionic/vue';
 import {addCircle, checkmarkCircle} from 'ionicons/icons';
+import {ref, onMounted} from 'vue';
+import {useRoute} from 'vue-router';
 import GameList from '@/components/GameList.vue';
 import {Game} from '@/types';
-import {searchGames} from '@/services/api/games';
+import {fetchGames} from '@/services/api/games';
 import {isGenreInPreferences} from '@/services/preferences/';
 import {addGenreToFavorites, removeGenreFromFavorites} from '@/services/api';
 import {handleError} from '@/utils';
@@ -60,9 +60,9 @@ const toast = ref({
   color: ''
 });
 
-const fetchGames = async () => {
+const loadGames = async () => {
   try {
-    games.value = await searchGames([genreName], [], [], []);
+    games.value = await fetchGames([genreName], [], [], []);
   } catch (error) {
     const errorMessage = handleError(error, 'Failed to load games for this genre.');
     showToast(errorMessage, 'danger');
@@ -102,7 +102,7 @@ const showToast = (message: string, color: string) => {
 };
 
 onMounted(() => {
-  fetchGames();
+  loadGames();
   checkFavorite();
 });
 </script>

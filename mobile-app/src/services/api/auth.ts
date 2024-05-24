@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from '@/services/api/apiClient';
 import {setAuthToken, setUserEmailToPreferences} from '@/services/preferences';
 import {handleApiError} from '@/services/api';
 import {AuthResponse, User} from '@/types';
