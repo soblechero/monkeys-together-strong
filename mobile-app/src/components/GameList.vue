@@ -7,7 +7,7 @@
         </ion-thumbnail>
         <ion-label>
           <h3>{{ game.name }}</h3>
-          <p>{{ game.summary }}</p>
+          <p>{{ truncateSummary(game.summary) }}</p>
         </ion-label>
       </ion-item>
       <ion-item-options side="end">
@@ -51,7 +51,8 @@ const fetchFavorites = async () => {
   try {
     favorites.value = await getPreferenceGames();
   } catch (error) {
-    console.error('Failed to fetch favorite games:', error);
+    const errorMessage = handleError(error, 'Failed to fetch favorite games.');
+    emit('show-toast', errorMessage, 'danger');
   }
 };
 
@@ -77,6 +78,10 @@ const toggleFavorite = async (game: Game) => {
 
 const isFavorite = (gameName: string) => {
   return favorites.value.includes(gameName);
+};
+
+const truncateSummary = (summary: string, maxLength: number = 99) => {
+  return summary.length > maxLength ? summary.substring(0, maxLength) + '...' : summary;
 };
 
 onMounted(() => {

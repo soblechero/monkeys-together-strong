@@ -76,7 +76,7 @@ import {
   onIonViewWillEnter
 } from '@ionic/vue';
 import {pricetag} from 'ionicons/icons';
-import {ref, computed, onMounted} from 'vue';
+import {ref, computed} from 'vue';
 import {useRouter} from 'vue-router';
 import GameList from '@/components/GameList.vue';
 import {Game} from '@/types';
@@ -156,10 +156,6 @@ const showToast = (message: string, color: string) => {
   toast.value.color = color;
   toast.value.isOpen = true;
 };
-
-onMounted(() => {
-  loadGenres();
-});
 
 onIonViewWillEnter(() => {
   loadGenres();

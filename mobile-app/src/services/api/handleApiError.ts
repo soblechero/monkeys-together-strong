@@ -1,9 +1,9 @@
-import { AxiosError } from 'axios';
+import axios from 'axios';
 
 const handleApiError = (error: unknown, contextMessage: string): Error => {
     let message = `${contextMessage} An error occurred. Please try again.`;
 
-    if (isAxiosError(error)) {
+    if (axios.isAxiosError(error)) {
         if (error.response) {
             const data = error.response?.data as { message?: string };
             message = `${contextMessage} ${data?.message || 'An error occurred. Please try again.'}`;
@@ -19,8 +19,8 @@ const handleApiError = (error: unknown, contextMessage: string): Error => {
     return new Error(message);
 };
 
-const isAxiosError = (error: any): error is AxiosError => {
-    return error.isAxiosError === true;
-};
+// const isAxiosError = (error: unknown): error is AxiosError => {
+//     return (error as AxiosError)?.isAxiosError === true;
+// };
 
 export {handleApiError};

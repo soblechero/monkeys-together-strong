@@ -65,7 +65,7 @@ import {
   IonCardContent,
   onIonViewWillEnter
 } from '@ionic/vue';
-import {ref, onMounted, computed} from 'vue';
+import {ref, computed} from 'vue';
 import {useRouter} from 'vue-router';
 import {Game} from '@/types';
 import {getPreferenceGenres} from '@/services/preferences';
@@ -131,10 +131,6 @@ const showToast = (message: string, color: string) => {
   toast.value.color = color;
   toast.value.isOpen = true;
 };
-
-onMounted(() => {
-  loadGames();
-});
 
 onIonViewWillEnter(() => {
   loadGames();

@@ -61,7 +61,7 @@ import {
   IonToast,
   onIonViewWillEnter
 } from '@ionic/vue';
-import {ref, onMounted} from 'vue';
+import {ref} from 'vue';
 import GameList from '@/components/GameList.vue';
 import GenreList from '@/components/GenreList.vue';
 import {getPreferenceGames, getPreferenceGenres, getUserEmailFromPreferences} from '@/services/preferences';
@@ -127,10 +127,6 @@ const loadProfileData = () => {
   loadFavoriteGames();
   loadFavoriteGenres();
 };
-
-onMounted(() => {
-  loadProfileData();
-});
 
 onIonViewWillEnter(() => {
   loadProfileData();
