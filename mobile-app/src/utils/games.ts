@@ -30,4 +30,9 @@ const groupGamesByGameGenres = (gamesList: Game[]): Record<string, Game[]> => {
     }, {} as Record<string, Game[]>);
 };
 
-export {convertGamesList, groupGamesByProvidedGenres, groupGamesByGameGenres};
+const truncateSummary = (summary: string, maxLength: number = 99) => {
+    return summary.length > maxLength ? summary.substring(0, maxLength) + '...' : summary;
+};
+
+
+export {convertGamesList, groupGamesByProvidedGenres, groupGamesByGameGenres, truncateSummary};

@@ -36,7 +36,7 @@ import {useRouter} from 'vue-router';
 import {addGameToFavorites, removeGameFromFavorites} from '@/services/api/games';
 import {getPreferenceGames} from '@/services/preferences/games';
 import {Game} from '@/types';
-import {handleError} from '@/utils';
+import {handleError, truncateSummary} from '@/utils';
 
 const props = defineProps<{
   games: Game[];
@@ -78,10 +78,6 @@ const toggleFavorite = async (game: Game) => {
 
 const isFavorite = (gameName: string) => {
   return favorites.value.includes(gameName);
-};
-
-const truncateSummary = (summary: string, maxLength: number = 99) => {
-  return summary.length > maxLength ? summary.substring(0, maxLength) + '...' : summary;
 };
 
 onMounted(() => {
