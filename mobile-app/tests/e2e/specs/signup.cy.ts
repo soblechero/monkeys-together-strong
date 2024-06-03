@@ -8,7 +8,7 @@ describe('Signup', () => {
 
     it('debería registrar con credenciales válidas', function () {
         const newUser: User = {
-            username: 'testuser3',
+            name: 'testuser3',
             email: 'user3@test.dev',
             password: 'Test9012!',
             access_token: 'valid_token_for_user3'
@@ -21,7 +21,7 @@ describe('Signup', () => {
 
         cy.visit('/auth');
         cy.contains('Signup').click();
-        cy.get('input[placeholder="Username"]').type(newUser.username!);
+        cy.get('input[placeholder="Name"]').type(newUser.name!);
         cy.get('input[placeholder="Email"]').type(newUser.email);
         cy.get('input[placeholder="Password"]').type(newUser.password);
         cy.get('button').contains('Continue').click();
@@ -41,7 +41,7 @@ describe('Signup', () => {
 
         cy.visit('/auth');
         cy.contains('Signup').click();
-        cy.get('input[placeholder="Username"]').type('anotheruser');
+        cy.get('input[placeholder="Name"]').type('anotheruser');
         cy.get('input[placeholder="Email"]').type(existingUser.email);
         cy.get('input[placeholder="Password"]').type('AnotherPass123!');
         cy.get('button').contains('Continue').click();

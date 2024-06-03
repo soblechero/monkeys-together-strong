@@ -1,15 +1,18 @@
 import apiClient from './apiClient';
-import {Game, GameSearchCriteria, GamesList} from '@/types';
+import {Game, GameBase, GamesBaseList, GameSearchCriteria, GamesList} from '@/types';
 import {setPreferenceGames, addGameToPreferences, removeGameFromPreferences} from '@/services/preferences';
 import {handleApiError} from '@/services/api';
 import {convertGamesList} from '@/utils/games';
 
-const fetchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[]): Promise<GamesList> => {
+const fetchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[],
+                          limit: number = 50, offset: number = 0): Promise<GamesList> => {
     const criteria: GameSearchCriteria = {};
-    if (genres && genres.length > 0) criteria.genres = genres;
-    if (names && names.length > 0) criteria.names = names;
-    if (releaseYears && releaseYears.length > 0) criteria.releaseYears = releaseYears;
-    if (platforms && platforms.length > 0) criteria.platforms = platforms;
+    if (genres?.length > 0) criteria.genres = genres;
+    if (names?.length > 0) criteria.names = names;
+    if (releaseYears?.length > 0) criteria.releaseYears = releaseYears;
+    if (platforms?.length > 0) criteria.platforms = platforms;
+    criteria.limit = limit ?? 50;
+    criteria.offset = offset ?? 0;
 
     try {
         const response = await apiClient.get<GamesList>('/games', {params: criteria});
@@ -26,7 +29,8 @@ const fetchFavoriteGames = async (): Promise<GamesList> => {
 
 const creteOrUpdateFavoriteGames = async (gameNames: string[]): Promise<void> => {
     try {
-        await apiClient.put('/user/games', {games: gameNames});
+        const games: GamesBaseList = gameNames.map(name => ({name} as GameBase));
+        await apiClient.put('/user/games', {games});
         await setPreferenceGames(gameNames);
     } catch (error) {
         throw handleApiError(error, 'Failed to update user games.');
@@ -35,7 +39,8 @@ const creteOrUpdateFavoriteGames = async (gameNames: string[]): Promise<void> =>
 
 const addGameToFavorites = async (gameName: string): Promise<void> => {
     try {
-        await apiClient.post('/user/games', {game: gameName});
+        const game: GameBase = {name: gameName};
+        await apiClient.post('/user/games', {game});
         await addGameToPreferences(gameName);
     } catch (error) {
         throw handleApiError(error, 'Failed to add game to favorites.');

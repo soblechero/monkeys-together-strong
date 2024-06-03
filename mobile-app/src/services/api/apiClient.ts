@@ -29,7 +29,7 @@ apiClient.interceptors.request.use(async (config) => {
 apiClient.interceptors.response.use((response) => {
     return response;
 }, async (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response?.status === 401) {
         await removeAuthToken();
         await router.push('/auth');
     }

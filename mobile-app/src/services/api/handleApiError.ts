@@ -6,7 +6,7 @@ const handleApiError = (error: unknown, contextMessage: string): Error => {
     if (axios.isAxiosError(error)) {
         if (error.response) {
             const data = error.response?.data as { message?: string };
-            message = `${contextMessage} ${data?.message || 'An error occurred. Please try again.'}`;
+            message = `${contextMessage} ${data?.message ?? 'An error occurred. Please try again.'}`;
             //const data = error.response?.data as { message?: string } | undefined;
             //const errorMessage = data?.message || error.message || 'An error occurred. Please try again.';
             //message = `${contextMessage} ${errorMessage}`;

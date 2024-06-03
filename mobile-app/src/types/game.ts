@@ -1,5 +1,10 @@
-export interface Game {
+export interface GameBase {
     name: string;
+}
+
+export type GamesBaseList = GameBase[];
+
+export interface Game extends GameBase {
     genres: string[];
     thumb: string;
     artwork: string;

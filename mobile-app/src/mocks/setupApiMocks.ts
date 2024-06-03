@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import apiClient from '@/services/api/apiClient';
 import {errors, users as usersData, genres as genresData, games as gamesData} from '@/mocks';
-import {ApiError, AuthResponse, User, GamesList, GameSearchCriteria} from '@/types';
+import {Message, Token, User, GamesList, GameSearchCriteria, OAuth2RequestForm} from '@/types';
 import {convertGamesList} from "@/utils";
 
 const users: User[] = usersData as User[];
@@ -14,29 +14,29 @@ const setupApiMocks = () => {
     console.log('Mock API setup initialized');
 
     mock.onPost('/login').reply(config => {
-        const {email, password}: User = JSON.parse(config.data);
-        const user = users.find(user => user.email === email && user.password === password);
+        const {username, password}: OAuth2RequestForm = JSON.parse(config.data);
+        const user = users.find(user => user.email === username && user.password === password);
         if (user) {
-            return [200, {access_token: user.access_token} as AuthResponse];
+            return [200, {access_token: user.access_token} as Token];
         } else {
-            return [401, {message: errors.invalid_credentials} as ApiError];
+            return [401, {message: errors.invalid_credentials} as Message];
         }
     });
 
     mock.onPost('/signup').reply(config => {
-        const {email, username, password}: User = JSON.parse(config.data);
+        const {name, email, password}: User = JSON.parse(config.data);
         const userExists = users.find(user => user.email === email);
         if (userExists) {
-            return [400, {message: errors.user_already_exists} as ApiError];
+            return [400, {message: errors.user_already_exists} as Message];
         } else {
             const newUser: User = {
-                username,
+                name,
                 email,
                 password,
                 access_token: `new_token_for_${email}`
             };
             users.push(newUser);
-            return [201, {access_token: newUser.access_token} as AuthResponse];
+            return [201, {access_token: newUser.access_token} as Token];
         }
     });
 
@@ -47,7 +47,7 @@ const setupApiMocks = () => {
         if (user) {
             return [200, {logged_in_as: user.email}];
         } else {
-            return [401, {message: errors.invalid_token} as ApiError];
+            return [401, {message: errors.invalid_token} as Message];
         }
     });
 

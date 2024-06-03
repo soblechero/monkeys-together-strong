@@ -1,6 +1,6 @@
 import apiClient from './apiClient';
 import {addGenreToPreferences, removeGenreFromPreferences, setPreferenceGenres} from '@/services/preferences';
-import {creteOrUpdateFavoriteGames, handleApiError} from '@/services/api';
+import {handleApiError} from '@/services/api';
 
 const fetchGenres = async (): Promise<string[]> => {
     const response = await apiClient.get('/genres');
