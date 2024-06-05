@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import apiClient from '@/services/api/apiClient';
 import {errors, users as usersData, genres as genresData, games as gamesData} from '@/mocks';
-import {Message, Token, User, GamesList, GameSearchCriteria, OAuth2RequestForm} from '@/types';
+import {Message, Token, User, GamesList, GameSearchCriteria, OAuth2RequestForm, GamesBaseList} from '@/types';
 import {convertGamesList} from "@/utils";
 
 const users: User[] = usersData as User[];
@@ -86,8 +86,8 @@ const setupApiMocks = () => {
         try {
             const data = JSON.parse(config.data);
 
-            if (data.genre) {
-                console.log('Adding genre:', data.genre);
+            if (data) {
+                console.log('Adding genre:', data);
                 return [200, {message: 'Genre added to favorites'}];
             } else {
                 return [400, {message: 'Invalid request body'}];
@@ -144,7 +144,7 @@ const setupApiMocks = () => {
         //     return [401, {message: 'Invalid token'}];
         // }
 
-        const userGames: GamesList = games.slice(0, 5); // Mocking with first 5 games as an example
+        const userGames: GamesBaseList = games.slice(0, 5); // Mocking with first 5 games as an example
         return [200, userGames];
     });
 
@@ -183,8 +183,8 @@ const setupApiMocks = () => {
         try {
             const data = JSON.parse(config.data);
 
-            if (data.game) {
-                console.log('Adding game:', data.game);
+            if (data) {
+                console.log('Adding game:', data);
                 return [200, {message: 'Game added to favorites'}];
             } else {
                 return [400, {message: 'Invalid request body'}];

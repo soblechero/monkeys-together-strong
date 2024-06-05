@@ -1,6 +1,7 @@
 import apiClient from './apiClient';
 import {addGenreToPreferences, removeGenreFromPreferences, setPreferenceGenres} from '@/services/preferences';
 import {handleApiError} from '@/services/api';
+import {Genre} from "@/types";
 
 const fetchGenres = async (): Promise<string[]> => {
     const response = await apiClient.get('/genres');
@@ -21,19 +22,20 @@ const creteOrUpdateFavoriteGenres = async (genres: string[]): Promise<void> => {
     }
 };
 
-const addGenreToFavorites = async (genre: string): Promise<void> => {
+const addGenreToFavorites = async (genreName: string): Promise<void> => {
     try {
-        await apiClient.post('/user/genres', {genre: genre});
-        await addGenreToPreferences(genre);
+        const genre: Genre = {name: genreName}
+        await apiClient.post('/user/genres', genre);
+        await addGenreToPreferences(genreName);
     } catch (error) {
         throw handleApiError(error, 'Failed to add genre to favorites.');
     }
 };
 
-const removeGenreFromFavorites = async (genre: string): Promise<void> => {
+const removeGenreFromFavorites = async (genreName: string): Promise<void> => {
     try {
-        await apiClient.delete(`/user/genres/${genre}`);
-        await removeGenreFromPreferences(genre);
+        await apiClient.delete(`/user/genres/${genreName}`);
+        await removeGenreFromPreferences(genreName);
     } catch (error) {
         throw handleApiError(error, 'Failed to remove genre from favorites.');
     }

@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true" class="ion-no-border">
       <ion-toolbar class="ion-padding-top ion-padding-horizontal">
-        <ion-searchbar v-model="searchQuery" @ionInput="onSearch" :debounce="500" class="mt-2"></ion-searchbar>
+        <ion-searchbar v-model="searchQuery" @ionInput="onSearch" :debounce="1500" class="mt-2"></ion-searchbar>
         <div v-if="searchQuery">
           <ion-chip :color="searchType === 'game' ? 'primary' : 'medium'" @click="selectSearchType('game')">
             <ion-label>Game</ion-label>

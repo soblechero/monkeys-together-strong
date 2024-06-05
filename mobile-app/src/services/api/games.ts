@@ -22,8 +22,8 @@ const fetchGames = async (genres: string[], names: string[], releaseYears: numbe
     }
 };
 
-const fetchFavoriteGames = async (): Promise<GamesList> => {
-    const response = await apiClient.get<GamesList>('/user/games');
+const fetchFavoriteGames = async (): Promise<GamesBaseList> => {
+    const response = await apiClient.get<GamesBaseList>('/user/games');
     return convertGamesList(response.data);
 };
 
@@ -40,24 +40,24 @@ const creteOrUpdateFavoriteGames = async (gameNames: string[]): Promise<void> =>
 const addGameToFavorites = async (gameName: string): Promise<void> => {
     try {
         const game: GameBase = {name: gameName};
-        await apiClient.post('/user/games', {game});
+        await apiClient.post('/user/games', game);
         await addGameToPreferences(gameName);
     } catch (error) {
         throw handleApiError(error, 'Failed to add game to favorites.');
     }
 };
 
-const removeGameFromFavorites = async (name: string): Promise<void> => {
+const removeGameFromFavorites = async (gameName: string): Promise<void> => {
     try {
-        await apiClient.delete(`/user/games/${name}`);
-        await removeGameFromPreferences(name);
+        await apiClient.delete(`/user/games/${gameName}`);
+        await removeGameFromPreferences(gameName);
     } catch (error) {
         throw handleApiError(error, 'Failed to remove game from favorites.');
     }
 };
 
-const fetchGameDetails = async (name: string): Promise<Game> => {
-    const games = await fetchGames([], [name], [], []);
+const fetchGameDetails = async (gameName: string): Promise<Game> => {
+    const games = await fetchGames([], [gameName], [], []);
     if (games.length === 0) {
         throw new Error('Game not found');
     }

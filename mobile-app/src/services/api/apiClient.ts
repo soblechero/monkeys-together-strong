@@ -21,6 +21,12 @@ apiClient.interceptors.request.use(async (config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
+    const baseURL = config.baseURL ?? '';
+    const url = config.url ?? '';
+    const fullUrl = `${baseURL}${url}?${new URLSearchParams(config.params)}`;
+    console.log('URL completa:', fullUrl);
+
     return config;
 }, (error) => {
     return Promise.reject(error);
