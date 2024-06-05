@@ -1,9 +1,9 @@
 from sqlmodel import Session, select
-from app.models.genre import Genre, GenreBase
+from app.models.genre import Genre
 from app.models.user import User
 
 """
-This module implements CRUD operations for the Genre model.
+Este módulo implementa operaciones CRUD para el modelo Genre.
 
 """
 

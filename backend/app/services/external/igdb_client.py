@@ -123,18 +123,18 @@ class IGDBClient:
 # TODO: guardar y recuperar el token de acceso en la base de datos
 igdb_client = IGDBClient(settings.IGDB_CLIENT_ID, settings.IGDB_CLIENT_SECRET, settings.IGDB_ACCESS_TOKEN)
 
-if __name__ == "__main__":
-    # print(igdb_client.access_token)
-    criteria = GameSearchCriteria(
-        genres=["Shooter", "RPG"],
-        # names=["The Witcher 3", "Cyberpunk 2077"],
-        # platforms=["PlayStation 4", "Xbox One"],
-        release_years=[2024],
-        limit=10,
-        offset=0
-    )
-    game_query = igdb_client.build_game_query(criteria)
-    print(game_query)
-    games = igdb_client.fetch_games(criteria)
-    print(len(games['games']))
-    print(GamesDetails.parse_igdb_games_data(games))
+# if __name__ == "__main__":
+#     # print(igdb_client.access_token)
+#     criteria = GameSearchCriteria(
+#         genres=["Shooter", "RPG"],
+#         # names=["The Witcher 3", "Cyberpunk 2077"],
+#         # platforms=["PlayStation 4", "Xbox One"],
+#         release_years=[2024],
+#         limit=10,
+#         offset=0
+#     )
+#     game_query = igdb_client.build_game_query(criteria)
+#     print(game_query)
+#     games = igdb_client.fetch_games(criteria)
+#     print(len(games['games']))
+#     print(GamesDetails.parse_igdb_games_data(games))

@@ -25,8 +25,27 @@ The routes are protected by the dependency injection of the current user and the
 router = APIRouter()
 
 
-@router.get("/games/", response_model=list[GameDetails])
-def read_games(current_user: CurrentUser, criteria: Annotated[GameSearchCriteria, Depends()]) -> list[GameDetails]:
+@router.get("/games/", response_model=list[GameDetails], response_model_by_alias=True)
+def read_games(
+        # current_user: CurrentUser,
+        # criteria: Annotated[GameSearchCriteria, Depends()]
+        genres: Annotated[str | None, Query(alias="genres")] = None,
+        names: Annotated[str | None, Query(alias="names")] = None,
+        platforms: Annotated[str | None, Query(alias="platforms")] = None,
+        release_years: Annotated[int | None, Query(alias="releaseYears")] = None,
+        limit: Annotated[int, Query(alias="limit")] = 50,
+        offset: Annotated[int, Query(alias="offset")] = 0
+) -> list[GameDetails]:
+    print(genres)
+
+    criteria = GameSearchCriteria.parse_query_data({
+        "genres": genres,
+        "names": names,
+        "platforms": platforms,
+        "release_years": release_years,
+        "limit": limit,
+        "offset": offset
+    })
     games_igdb = igdb_client.fetch_games(criteria)
     games_details = GamesDetails.parse_igdb_games_data(games_igdb)
     return games_details.games

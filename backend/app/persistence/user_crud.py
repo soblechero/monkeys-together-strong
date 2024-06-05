@@ -6,7 +6,7 @@ from app.core.security import get_password_hash, verify_password
 from app.models.user import User, UserCreate
 
 """
-This module implements CRUD operations for the User model.
+Este módulo implementa operaciones CRUD para el modelo User.
 
 """
 

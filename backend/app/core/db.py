@@ -1,8 +1,7 @@
 from sqlmodel import SQLModel, Session, create_engine, select
 
 from app.core.config import settings
-from app.models import User
-from app.models.user import UserCreate
+from app.models.user import User, UserCreate
 from app.persistence import user_crud
 
 engine = create_engine(settings.DATABASE_URI)
@@ -14,7 +13,6 @@ engine = create_engine(settings.DATABASE_URI)
 
 
 def init_db(session: Session) -> None:
-    # This works because the models are already imported and registered from app.models
     SQLModel.metadata.create_all(engine)
 
     user = session.exec(

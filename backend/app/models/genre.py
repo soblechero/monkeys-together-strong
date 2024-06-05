@@ -1,6 +1,11 @@
-from typing import Self
+from typing import Self, TYPE_CHECKING
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
+
+from app.models.links import UserGenreLink
+
+if TYPE_CHECKING:
+    from app.models.user import User
 
 
 class GenreBase(SQLModel):
@@ -9,7 +14,7 @@ class GenreBase(SQLModel):
 
 class Genre(GenreBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    # fans: list["User"] | None = Relationship(back_populates="favorite_genres", link_model=UserGenreLink)
+    fans: list["User"] | None = Relationship(back_populates="favorite_genres", link_model=UserGenreLink)
 
 
 # Properties to receive and return via API

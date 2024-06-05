@@ -3,7 +3,7 @@ from app.models.game import Game, GameBase
 from app.models.user import User
 
 """
-This module implements CRUD operations for the Game model.
+Este módulo implementa operaciones CRUD para el modelo Game.
 
 """
 
