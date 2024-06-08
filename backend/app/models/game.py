@@ -3,7 +3,7 @@ from typing import Annotated, Self, TYPE_CHECKING
 
 from fastapi import Query
 from pydantic import HttpUrl, ConfigDict, AliasGenerator
-from pydantic.alias_generators import to_camel, to_snake
+from pydantic.alias_generators import to_camel
 from sqlmodel import SQLModel, Field, Relationship
 
 from app.models.links import UserGameLink
@@ -50,7 +50,7 @@ class GameSearchCriteria(SQLModel):
             "limit": raw_data.get("limit", 50),
             "offset": raw_data.get("offset", 0)
         }
-        return cls(**data)
+        return cls.model_validate(data)
 
 
 # Properties to receive and return via API
@@ -68,7 +68,6 @@ class GameDetails(GameBase):
     model_config = ConfigDict(
         populate_by_name=True,
         alias_generator=AliasGenerator(
-            validation_alias=to_snake,
             serialization_alias=to_camel,
         )
     )
@@ -100,7 +99,6 @@ class GamesDetails(SQLModel):
     def update_hltb(cls, games_data: dict) -> Self:
         games = games_data.get('games', [])
         return cls.model_validate({"games": [GameDetails.parse_igdb_game_data(game) for game in games]})
-
 
 
 # Properties to receive and return via API

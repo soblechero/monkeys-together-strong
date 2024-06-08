@@ -16,13 +16,3 @@ class UserGenreLink(SQLModel, table=True):
 class UserGameLink(SQLModel, table=True):
     user_id: int | None = Field(default=None, foreign_key="user.id", primary_key=True)
     game_id: int | None = Field(default=None, foreign_key="game.id", primary_key=True)
-
-# Se llama en app/models/__init__.py, para que se ejecute al importar el módulo
-# def setup_relationships():
-#     User.update_forward_refs()
-#     Game.update_forward_refs()
-#     Genre.update_forward_refs()
-#     User.favorite_games = Relationship(back_populates="fans", link_model=UserGameLink)
-#     Game.fans = Relationship(back_populates="favorite_games", link_model=UserGameLink)
-#     User.favorite_genres = Relationship(back_populates="fans", link_model=UserGenreLink)
-#     Genre.fans = Relationship(back_populates="favorite_genres", link_model=UserGenreLink)

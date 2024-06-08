@@ -24,7 +24,7 @@ The routes are protected by the dependency injection of the current user and the
 router = APIRouter()
 
 
-@router.get("/genres/", response_model=list[str])
+@router.get("/", response_model=list[str])
 def read_genres(current_user: CurrentUser, offset: int = 0, limit: int = 25) -> list[str]:
     genres_igdb = igdb_client.fetch_genres(offset=offset, limit=limit)
     genres_api = GenresApi.model_validate(genres_igdb)
