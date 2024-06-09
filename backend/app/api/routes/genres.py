@@ -24,7 +24,7 @@ The routes are protected by the dependency injection of the current user and the
 router = APIRouter()
 
 
-@router.get("/", response_model=list[str])
+@router.get("/genres", response_model=list[str])
 def read_genres(current_user: CurrentUser, offset: int = 0, limit: int = 25) -> list[str]:
     genres_igdb = igdb_client.fetch_genres(offset=offset, limit=limit)
     genres_api = GenresApi.model_validate(genres_igdb)
@@ -32,7 +32,7 @@ def read_genres(current_user: CurrentUser, offset: int = 0, limit: int = 25) -> 
     return genre_names
 
 
-@router.put("/user/genres/", response_model=GenresPublic)
+@router.put("/user/genres", response_model=GenresPublic)
 def update_user_genres(
         session: SessionDep, current_user: CurrentUser, genres_in: GenresPublic
 ) -> GenresPublic:
@@ -41,7 +41,7 @@ def update_user_genres(
     return GenresPublic.model_validate({"genres": genre_names})
 
 
-@router.post("/user/genres/", response_model=GenrePublic)
+@router.post("/user/genres", response_model=GenrePublic)
 def add_user_genre(session: SessionDep, current_user: CurrentUser, genre_in: GenrePublic) -> GenrePublic:
     if genre_crud.is_favorite_genre(session=session, user=current_user, genre_name=genre_in.name):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
@@ -61,7 +61,7 @@ def delete_user_genre(session: SessionDep, current_user: CurrentUser, genre_name
     return Message(message=f"{genre_name} deleted successfully")
 
 
-@router.get("/user/genres/", response_model=list[str])
+@router.get("/user/genres", response_model=list[str])
 def read_user_genres(current_user: CurrentUser) -> list[str]:
     genre_names = genre_crud.get_favorite_genre_names(user=current_user)
     return genre_names

@@ -22,11 +22,11 @@ class Game(GameBase, table=True):
 
 
 class GameSearchCriteria(SQLModel):
-    genres: list[str] | None = None
+    genres: Annotated[list[str] | None, Query(alias="genres")] = None
     names: Annotated[list[str] | None, Query(alias="names")] = None
     platforms: Annotated[list[str] | None, Query(alias="platforms")] = None
     release_years: Annotated[list[int] | None, Query(alias="releaseYears")] = None
-    limit: Annotated[int, Query(alias="limit")] = 50
+    limit: Annotated[int, Query(alias="limit")] = 25
     offset: Annotated[int, Query(alias="offset")] = 0
 
     model_config = ConfigDict(
@@ -47,7 +47,7 @@ class GameSearchCriteria(SQLModel):
             "names": process_comma_separated_input(raw_data.get("names")),
             "platforms": process_comma_separated_input(raw_data.get("platforms")),
             "release_years": process_comma_separated_integers(raw_data.get("releaseYears")),
-            "limit": raw_data.get("limit", 50),
+            "limit": raw_data.get("limit", 25),
             "offset": raw_data.get("offset", 0)
         }
         return cls.model_validate(data)
@@ -55,15 +55,15 @@ class GameSearchCriteria(SQLModel):
 
 # Properties to receive and return via API
 class GameDetails(GameBase):
-    name: str = Field(alias="name")
-    genres: list[str] = Field(alias="genres")
-    thumb: HttpUrl = Field(alias="thumb")
-    artwork: HttpUrl = Field(alias="artwork")
-    how_long_to_beat: Annotated[float, Field(default=0, alias="howLongToBeat")]
-    rating: float = Field(alias="rating")
-    release_date: datetime = Field(alias="releaseDate")
-    summary: str = Field(alias="summary")
-    platforms: list[str] = Field(alias="platforms")
+    name: Annotated[str, Field(alias="name")]
+    genres: Annotated[list[str], Field(alias="genres")]
+    thumb: Annotated[HttpUrl, Field(alias="thumb")]
+    artwork: Annotated[HttpUrl, Field(alias="artwork")]
+    how_long_to_beat: Annotated[float | None, Field(alias="howLongToBeat")] = None
+    rating: Annotated[float | None, Field(alias="rating")] = None
+    release_date: Annotated[datetime, Field(alias="releaseDate")]
+    summary: Annotated[str, Field(alias="summary")]
+    platforms: Annotated[list[str], Field(alias="platforms")]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -92,13 +92,15 @@ class GamesDetails(SQLModel):
 
     @classmethod
     def parse_igdb_games_data(cls, games_data: dict) -> Self:
-        games = games_data.get('games', [])
+        games = games_data.get("games", [])
         return cls.model_validate({"games": [GameDetails.parse_igdb_game_data(game) for game in games]})
 
-    @classmethod
-    def update_hltb(cls, games_data: dict) -> Self:
-        games = games_data.get('games', [])
-        return cls.model_validate({"games": [GameDetails.parse_igdb_game_data(game) for game in games]})
+    async def update_hltb(self, get_hltb: callable) -> Self:
+        for game in self.games:
+            hltb = await get_hltb(game.name)
+            game.sqlmodel_update({"how_long_to_beat": hltb})
+
+        return self
 
 
 # Properties to receive and return via API

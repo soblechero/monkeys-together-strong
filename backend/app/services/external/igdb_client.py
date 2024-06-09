@@ -1,23 +1,18 @@
 import time
-from datetime import datetime
 
 import requests
-from igdb.wrapper import IGDBWrapper
-from igdb.igdbapi_pb2 import GameResult, GenreResult  # type: ignore
 from google.protobuf.json_format import MessageToDict
+from igdb.igdbapi_pb2 import GameResult, GenreResult  # type: ignore
+from igdb.wrapper import IGDBWrapper
 
 from app.core.config import settings
-from app.models.game import GameSearchCriteria, GamesDetails
+from app.models.game import GameSearchCriteria
+from app.utils.date import year_to_timestamp
+
+"""
 
 
-def year_to_timestamp(year: int) -> (int, int):
-    """Converts the start and end of a given year to Unix timestamps."""
-    start_date = datetime(year, 1, 1, 0, 0)  # Beginning of the year
-    end_date = datetime(year, 12, 31, 23, 59, 59)  # End of the year
-    start_timestamp = int(time.mktime(start_date.timetuple()))
-    end_timestamp = int(time.mktime(end_date.timetuple()))
-    return start_timestamp, end_timestamp
-
+"""
 
 class IGDBClient:
     def __init__(self, client_id: str, client_secret: str, access_token: str | None = None) -> None:
@@ -64,7 +59,7 @@ class IGDBClient:
         genres_result.ParseFromString(byte_array)
         return MessageToDict(genres_result)
 
-    def build_game_query(self, criteria: GameSearchCriteria) -> str:
+    def _build_game_query(self, criteria: GameSearchCriteria) -> str:
         fields = "fields name, genres.name, cover.url, total_rating, first_release_date, summary, platforms.name;"
 
         conditions = []
@@ -92,8 +87,8 @@ class IGDBClient:
 
         conditions.append("total_rating_count > 20")
         conditions.append("category = 0")  # main games
-        conditions.append("(status = 0 | status = null);")  # released games
-        # conditions.append("version_parent = null;")
+        conditions.append("(status = 0 | status = null)")  # released games
+        conditions.append("version_parent = null;")
 
         where_clause = "where " + (" & ".join(conditions) if conditions else "")
         sort_clause = "sort total_rating desc;"
@@ -104,13 +99,7 @@ class IGDBClient:
 
     def fetch_games(self, criteria: GameSearchCriteria) -> dict:
         self.ensure_valid_wrapper()
-        query = self.build_game_query(criteria)
-        # query = (
-        #     f'fields name, genres.name, cover.url, total_rating, first_release_date, summary, platforms.name;'
-        #     f'where  total_rating_count > 20 & category = 0 & (status = 0 | status = null) & genres.name ~ *"RPG"* | genres.name ~ *"advent"*;'
-        #     f'sort rating desc;'
-        #     f'offset {criteria.offset}; limit {criteria.limit};'
-        # )
+        query = self._build_game_query(criteria)
 
         byte_array = self.wrapper.api_request('games.pb', query)
         games_result = GameResult()
@@ -126,10 +115,10 @@ igdb_client = IGDBClient(settings.IGDB_CLIENT_ID, settings.IGDB_CLIENT_SECRET, s
 # if __name__ == "__main__":
 #     # print(igdb_client.access_token)
 #     criteria = GameSearchCriteria(
-#         genres=["Shooter", "RPG"],
-#         # names=["The Witcher 3", "Cyberpunk 2077"],
+#         # genres=["Shooter"],
+#         names=["Grand Theft", "Cyberpunk 2077"],
 #         # platforms=["PlayStation 4", "Xbox One"],
-#         release_years=[2024],
+#         # release_years=[2024],
 #         limit=10,
 #         offset=0
 #     )
