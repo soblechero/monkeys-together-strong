@@ -1,5 +1,5 @@
-# Aplicación monkeys-together-strong
-Aplicación móvil desarrollada con Ionic
+# monkeys-together-strong
+Este monorepo contiene la aplicación móvil de recomendación de videojuegos desarrollada con Ionic y Vue, junto con su backend implementado en FastAPI y SQLModel.
 
 ## Estructura del Proyecto
 - **mobile-app/**: Código fuente de la aplicación móvil.
