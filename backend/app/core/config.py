@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     # 60 minutes * 24 hours * 28 days = 28 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 28
     ENVIRONMENT: Literal["development", "testing", "production"] = "development"
-    BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = []
+    BACKEND_CORS_ORIGINS: Annotated[list[str] | str, BeforeValidator(parse_cors)] = "*"
 
     IGDB_CLIENT_ID: str = ""
     IGDB_CLIENT_SECRET: str = ""

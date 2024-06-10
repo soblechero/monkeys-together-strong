@@ -13,15 +13,8 @@ from app.models.user import UserPublic, UserCreate
 from app.persistence import user_crud
 
 """
-This file contains the routes for authentication. It includes the following routes:
-
-1. Login - Get a token for future requests
-2. Signup - Create a new user and return a token for future requests
-3. Test token - Test the access token
-
-Each route is responsible for handling the request and response. 
-It uses the user_crud service to interact with the database.
-The routes are protected by the dependency injection of the current user and the session.
+Este módulo contiene las rutas de la API relacionadas con la autenticación de usuarios.
+[FastAPI docs for Simple OAuth2 with Password and Bearer](https://fastapi.tiangolo.com/tutorial/security/simple-oauth2)
 
 """
 
@@ -36,7 +29,7 @@ def login(
         form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> Token:
     """
-    OAuth2 compatible token login, get an access token for future requests
+    Inicio de sesión con token compatible con OAuth2, se obtiene un token de acceso para futuras solicitudes
     """
     user = user_crud.authenticate(
         session=session, email=form_data.username, password=form_data.password
@@ -56,7 +49,7 @@ def login(
 )
 def signup(*, session: SessionDep, user_data: UserCreate) -> Token:
     """
-    Create new user and return access token for future requests
+    Crea un nuevo usuario y devuelve un token de acceso para futuras solicitudes
     """
     user = user_crud.get_user_by_email(session=session, email=user_data.email)
     if user:

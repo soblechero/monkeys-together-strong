@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import HTTPException, Depends, APIRouter, status, Query
 
@@ -10,16 +10,7 @@ from app.services.external.hltb_client import hltb_client
 from app.services.external.igdb_client import igdb_client
 
 """
-This file contains the routes for games. It includes the following routes:
-
-1. Get games - Get games based on criteria
-2. Add game to user's favorite games
-3. Delete game from user's favorite games
-4. Get user's favorite games
-
-Each route is responsible for handling the request and response. 
-It uses the game_crud service to interact with the database.
-The routes are protected by the dependency injection of the current user and the session.
+Este módulo contiene las rutas de la API relacionadas con los juegos.
 
 """
 
@@ -29,23 +20,55 @@ router = APIRouter()
 @router.get("/games", response_model=list[GameDetails], response_model_by_alias=True)
 async def read_games(
         # current_user: CurrentUser,
-        # criteria: Annotated[GameSearchCriteria, Depends()]
-        genres: Annotated[str | None, Query(alias="genres")] = None,
-        names: Annotated[str | None, Query(alias="names")] = None,
-        platforms: Annotated[str | None, Query(alias="platforms")] = None,
-        release_years: Annotated[int | None, Query(alias="releaseYears")] = None,
+        genres: Annotated[list[str], Query(alias="genres[]")] = None,
+        names: Annotated[list[str], Query(alias="names[]")] = None,
+        platforms: Annotated[list[str], Query(alias="platforms[]")] = None,
+        release_years: Annotated[list[int], Query(alias="releaseYears[]")] = None,
         limit: Annotated[int, Query(alias="limit")] = 25,
         offset: Annotated[int, Query(alias="offset")] = 0
 ) -> list[GameDetails]:
-    criteria = GameSearchCriteria.parse_query_data({
-        "genres": genres,
-        "names": names,
-        "platforms": platforms,
-        "release_years": release_years,
-        "limit": limit,
-        "offset": offset
-    })
+    print(names)
+    criteria = GameSearchCriteria.model_validate(
+        {
+            "genres": genres,
+            "names": names,
+            "platforms": platforms,
+            "release_years": release_years,
+            "limit": limit,
+            "offset": offset
+        }
+    )
     games_igdb = igdb_client.fetch_games(criteria)
+    games_details = GamesDetails.parse_igdb_games_data(games_igdb)
+    if len(games_details.games) == 1:
+        # la petición a hltb tarda demasiado,
+        # solo recuperaremos dicha información cuando se pidan los detalles de un juego
+        await games_details.update_hltb(hltb_client.fetch_hltb)
+    return games_details.games
+
+
+@router.get("/games/search", response_model=list[GameDetails], response_model_by_alias=True)
+async def search_games(
+        # current_user: CurrentUser,
+        genres: Annotated[list[str], Query(alias="genres[]")] = None,
+        names: Annotated[list[str], Query(alias="names[]")] = None,
+        platforms: Annotated[list[str], Query(alias="platforms[]")] = None,
+        release_years: Annotated[list[int], Query(alias="releaseYears[]")] = None,
+        limit: Annotated[int, Query(alias="limit")] = 25,
+        offset: Annotated[int, Query(alias="offset")] = 0
+) -> list[GameDetails]:
+    print(names)
+    criteria = GameSearchCriteria.model_validate(
+        {
+            "genres": genres,
+            "names": names,
+            "platforms": platforms,
+            "release_years": release_years,
+            "limit": limit,
+            "offset": offset
+        }
+    )
+    games_igdb = igdb_client.search_games(criteria)
     games_details = GamesDetails.parse_igdb_games_data(games_igdb)
     if len(games_details.games) == 1:
         # la petición a hltb tarda demasiado,

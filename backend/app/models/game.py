@@ -22,10 +22,10 @@ class Game(GameBase, table=True):
 
 
 class GameSearchCriteria(SQLModel):
-    genres: Annotated[list[str] | None, Query(alias="genres")] = None
-    names: Annotated[list[str] | None, Query(alias="names")] = None
-    platforms: Annotated[list[str] | None, Query(alias="platforms")] = None
-    release_years: Annotated[list[int] | None, Query(alias="releaseYears")] = None
+    genres: Annotated[list[str] | None, Query(alias="genres[]")] = None
+    names: Annotated[list[str] | None, Query(alias="names[]")] = None
+    platforms: Annotated[list[str] | None, Query(alias="platforms[]")] = None
+    release_years: Annotated[list[int] | None, Query(alias="releaseYears[]")] = None
     limit: Annotated[int, Query(alias="limit")] = 25
     offset: Annotated[int, Query(alias="offset")] = 0
 

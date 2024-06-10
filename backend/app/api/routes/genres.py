@@ -7,17 +7,7 @@ from app.persistence import genre_crud
 from app.services.external.igdb_client import igdb_client
 
 """
-This file contains the routes for genres. It includes the following routes:
-
-1. Get all genres
-2. Update user's favorite genres
-3. Add a genre to user's favorite genres
-4. Delete a genre from user's favorite genres
-5. Get user's favorite genres
-
-Each route is responsible for handling the request and response. 
-It uses the genre_crud service to interact with the database.
-The routes are protected by the dependency injection of the current user and the session.
+Este módulo contiene las rutas de la API relacionadas con los géneros de juegos.
 
 """
 
