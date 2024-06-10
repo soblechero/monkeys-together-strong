@@ -4,13 +4,22 @@ import {handleApiError} from '@/services/api';
 import {Genre} from "@/types";
 
 const fetchGenres = async (): Promise<string[]> => {
-    const response = await apiClient.get('/genres');
-    return response.data;
+    try {
+        const response = await apiClient.get('/genres');
+        return response.data;
+    } catch (error) {
+        throw handleApiError(error, 'Failed to fetch genres.');
+    }
+
 };
 
 const fetchFavoriteGenres = async (): Promise<string[]> => {
-    const response = await apiClient.get('/user/genres');
-    return response.data;
+    try {
+        const response = await apiClient.get('/user/genres');
+        return response.data;
+    } catch (error) {
+        throw handleApiError(error, 'Failed to fetch user genres.');
+    }
 };
 
 const creteOrUpdateFavoriteGenres = async (genres: string[]): Promise<void> => {

@@ -6,6 +6,30 @@ import {convertGamesList} from '@/utils/games';
 
 const fetchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[],
                           limit: number = 50, offset: number = 0): Promise<GamesList> => {
+    const criteria = buildGameSearchCriteria(genres, names, releaseYears, platforms, limit, offset);
+
+    try {
+        const response = await apiClient.get<GamesList>('/games', {params: criteria});
+        return convertGamesList(response.data);
+    } catch (error) {
+        throw handleApiError(error, 'Failed to fetch games.');
+    }
+};
+
+const searchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[],
+                           limit: number = 50, offset: number = 0): Promise<GamesList> => {
+    const criteria = buildGameSearchCriteria(genres, names, releaseYears, platforms, limit, offset);
+
+    try {
+        const response = await apiClient.get<GamesList>('/games/search', {params: criteria});
+        return convertGamesList(response.data);
+    } catch (error) {
+        throw handleApiError(error, 'Failed to search games.');
+    }
+};
+
+function buildGameSearchCriteria(genres: string[], names: string[], releaseYears: number[], platforms: string[],
+                                 limit: number, offset: number): GameSearchCriteria {
     const criteria: GameSearchCriteria = {};
     if (genres?.length > 0) criteria.genres = genres;
     if (names?.length > 0) criteria.names = names;
@@ -13,18 +37,17 @@ const fetchGames = async (genres: string[], names: string[], releaseYears: numbe
     if (platforms?.length > 0) criteria.platforms = platforms;
     criteria.limit = limit ?? 50;
     criteria.offset = offset ?? 0;
+    return criteria;
+}
 
+const fetchFavoriteGames = async (): Promise<string[]> => {
     try {
-        const response = await apiClient.get<GamesList>('/games', {params: criteria});
-        return convertGamesList(response.data);
+        const response = await apiClient.get<GamesBaseList>('/user/games');
+        return response.data.map(game => game.name);
     } catch (error) {
-        throw handleApiError(error, 'Failed to search games.');
+        throw handleApiError(error, 'Failed to fetch user games.');
     }
-};
 
-const fetchFavoriteGames = async (): Promise<GamesBaseList> => {
-    const response = await apiClient.get<GamesBaseList>('/user/games');
-    return convertGamesList(response.data);
 };
 
 const creteOrUpdateFavoriteGames = async (gameNames: string[]): Promise<void> => {
@@ -71,6 +94,7 @@ const fetchSimilarGames = async (genres: string[]): Promise<Game[]> => {
 
 export {
     fetchGames,
+    searchGames,
     fetchFavoriteGames,
     creteOrUpdateFavoriteGames,
     addGameToFavorites,

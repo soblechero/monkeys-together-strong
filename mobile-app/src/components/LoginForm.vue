@@ -13,7 +13,8 @@
 import {IonButton, IonInput, IonText} from '@ionic/vue';
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
-import {login} from '@/services/api';
+import {fetchFavoriteGames, fetchFavoriteGenres, login} from '@/services/api';
+import {setPreferenceGames, setPreferenceGenres} from "@/services/preferences";
 import {handleError} from '@/utils';
 
 const email = ref('');
@@ -31,11 +32,18 @@ const handleLogin = async () => {
 
   try {
     await login(email.value, password.value);
+    await syncUserData();
     await router.push('/');
   } catch (error) {
     errorMessage.value = handleError(error, 'Login failed.');
   }
 };
+
+const syncUserData = async () => {
+  await setPreferenceGames(await fetchFavoriteGames());
+  await setPreferenceGenres(await fetchFavoriteGenres());
+};
+
 </script>
 
 <style scoped>

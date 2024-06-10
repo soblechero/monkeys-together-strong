@@ -1,8 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
+import {AxiosRequestConfig} from "axios";
 import apiClient from '@/services/api/apiClient';
 import {errors, users as usersData, genres as genresData, games as gamesData} from '@/mocks';
-import {Message, Token, User, GamesList, GameSearchCriteria, OAuth2RequestForm, GamesBaseList} from '@/types';
+import {Message, Token, User, GamesList, GameSearchCriteria, GamesBaseList} from '@/types';
 import {convertGamesList} from "@/utils";
+
 
 const users: User[] = usersData as User[];
 const games: GamesList = convertGamesList(gamesData);
@@ -14,12 +16,19 @@ const setupApiMocks = () => {
     console.log('Mock API setup initialized');
 
     mock.onPost('/login').reply(config => {
-        const {username, password}: OAuth2RequestForm = JSON.parse(config.data);
-        const user = users.find(user => user.email === username && user.password === password);
-        if (user) {
-            return [200, {access_token: user.access_token} as Token];
+        if (config.headers?.['Content-Type'] === 'application/x-www-form-urlencoded') {
+            const params = new URLSearchParams(config.data);
+            const username = params.get('username');
+            const password = params.get('password');
+
+            const user = users.find(user => user.email === username && user.password === password);
+            if (user) {
+                return [200, {access_token: user.access_token} as Token];
+            } else {
+                return [401, {message: errors.invalid_credentials} as Message];
+            }
         } else {
-            return [401, {message: errors.invalid_credentials} as Message];
+            return [400, {message: 'Bad request'}];
         }
     });
 
@@ -109,7 +118,7 @@ const setupApiMocks = () => {
 
     //mock.onGet('/games').reply<GamesList>(200, games as GamesList);
 
-    mock.onGet('/games').reply<GamesList>(config => {
+    function filteredGames(config: AxiosRequestConfig<any>) {
         const params: GameSearchCriteria = config.params;
         let filteredGames: GamesList = games;
         if (params.genres && params.genres.length > 0) {
@@ -133,6 +142,14 @@ const setupApiMocks = () => {
             );
         }
         return [200, filteredGames];
+    }
+
+    mock.onGet('/games').reply<GamesList>(config => {
+        return filteredGames(config);
+    });
+
+    mock.onGet('/games/search').reply<GamesList>(config => {
+        return filteredGames(config);
     });
 
     mock.onGet('/user/games').reply(async config => {

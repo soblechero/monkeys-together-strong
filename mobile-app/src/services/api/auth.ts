@@ -1,12 +1,18 @@
 import apiClient from '@/services/api/apiClient';
 import {setAuthToken, setUserEmailToPreferences} from '@/services/preferences';
 import {handleApiError} from '@/services/api';
-import {OAuth2RequestForm, Token, User} from '@/types';
+import {Token, User} from '@/types';
 
 const login = async (email: string, password: string): Promise<string> => {
-    const oauth2Form: OAuth2RequestForm = {username: email, password};
+    const formData = new FormData();
+    formData.append('username', email);
+    formData.append('password', password);
     try {
-        const response = await apiClient.post<Token>('/login', oauth2Form);
+        const response = await apiClient.post<Token>('/login', formData, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
         await setUserEmailToPreferences(email);
         await setAuthToken(response.data.access_token);
         return response.data.access_token;

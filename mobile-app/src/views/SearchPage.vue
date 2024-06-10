@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true" class="ion-no-border">
       <ion-toolbar class="ion-padding-top ion-padding-horizontal">
-        <ion-searchbar v-model="searchQuery" @ionInput="onSearch" :debounce="1500" class="mt-2"></ion-searchbar>
+        <ion-searchbar v-model="searchQuery" @ionInput="onSearch" :debounce="1000" class="mt-2"></ion-searchbar>
         <div v-if="searchQuery">
           <ion-chip :color="searchType === 'game' ? 'primary' : 'medium'" @click="selectSearchType('game')">
             <ion-label>Game</ion-label>
@@ -80,7 +80,7 @@ import {ref, computed} from 'vue';
 import {useRouter} from 'vue-router';
 import GameList from '@/components/GameList.vue';
 import {Game} from '@/types';
-import {fetchGames, fetchGenres} from '@/services/api';
+import {searchGames, fetchGenres} from '@/services/api';
 import {getPreferenceGenres} from '@/services/preferences';
 import {handleError} from '@/utils';
 
@@ -102,9 +102,9 @@ const onSearch = async () => {
   if (searchQuery.value.trim()) {
     try {
       if (searchType.value === 'game') {
-        filteredGames.value = await fetchGames([], [searchQuery.value], [], []);
+        filteredGames.value = await searchGames([], [searchQuery.value], [], []);
       } else {
-        filteredGames.value = await fetchGames([searchQuery.value], [], [], []);
+        filteredGames.value = await searchGames([searchQuery.value], [], [], []);
       }
     } catch (error) {
       const errorMessage = handleError(error, 'Failed to search games.');

@@ -19,7 +19,7 @@ router = APIRouter()
 
 @router.get("/games", response_model=list[GameDetails], response_model_by_alias=True)
 async def read_games(
-        # current_user: CurrentUser,
+        current_user: CurrentUser,
         genres: Annotated[list[str], Query(alias="genres[]")] = None,
         names: Annotated[list[str], Query(alias="names[]")] = None,
         platforms: Annotated[list[str], Query(alias="platforms[]")] = None,
@@ -49,7 +49,7 @@ async def read_games(
 
 @router.get("/games/search", response_model=list[GameDetails], response_model_by_alias=True)
 async def search_games(
-        # current_user: CurrentUser,
+        current_user: CurrentUser,
         genres: Annotated[list[str], Query(alias="genres[]")] = None,
         names: Annotated[list[str], Query(alias="names[]")] = None,
         platforms: Annotated[list[str], Query(alias="platforms[]")] = None,
