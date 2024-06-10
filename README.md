@@ -7,24 +7,32 @@ Este monorepo contiene la aplicación móvil de recomendación de videojuegos de
   - **android/**: Código autogenerado para Android.
   - **ios/**: Código autogenerado para iOS.
 
-- **backend/**: Código del backend.
+- **backend/**: Código fuente del backend.
+  - **test/**: Tests unitarios
 
 - **dist/**: Contiene el APK generado para Android.
 
-## Requisitos Previos
+
+## Mobile App Setup
+### Configuración de Entornos
+Se utilizan ficheros `.env` para gestionar la configuración en diferentes entornos. Las variables a configurar son:
+
+- VITE_API_BASE_URL: URL base del backend de la aplicación.
+- VITE_USE_MOCKS: Define si se usa el servicio mock para simular el backend (false para usar el backend real).
+
+### Requisitos Previos
 - Node.js y npm
 - Ionic CLI
 - Android Studio
 
-### Instalación de Dependencias Globales
+#### Instalación de Dependencias Globales
 Instalar las herramientas necesarias globalmente:
 
 ```sh
 npm install -g @ionic/cli@latest native-run@latest
 ```
 
-## Configuración Inicial
-
+### Configuración Inicial
 - **Instalar Dependencias**:
    ```sh
    cd mobile-app
@@ -44,8 +52,8 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
      C:\Users\Usuario\AppData\Local\Programs\Android Studio\bin\studio64.exe
      ```
 
-## Compilar y Probar la Aplicación
-### Android
+### Compilar y Probar la Aplicación
+#### Android
 - **Construir y sincronizar la Aplicación**:
    ```sh
    npm run build
@@ -61,7 +69,7 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
    ```sh
    npx cap run android
    ```
-#### Alternativa
+##### Alternativa
 Se puede utilizar un solo comando de Ionic CLI que combina los pasos anteriores: construcción, sincronización y apertura en Android Studio:
 
 1. **Ejecutar el comando de Ionic CLI**:
@@ -69,7 +77,7 @@ Se puede utilizar un solo comando de Ionic CLI que combina los pasos anteriores:
    ionic capacitor build android
    ```
 
-### Navegador
+#### Navegador
 - **Ejecutar el Servidor de Desarrollo Local**:
    ```sh
    ionic serve
@@ -80,6 +88,56 @@ Se puede utilizar un solo comando de Ionic CLI que combina los pasos anteriores:
    - Seleccionar la vista adaptable y eligir un dispositivo móvil.
 
 
+
+## Backend Setup
+### Configuración de la Base de Datos
+La aplicación utiliza varios ficheros `.env` para gestionar la configuración de la base de datos en diferentes entornos. Se utiliza la variable `ENV_MODE` del fichero `.env` para determinar cuál de los ficheros de entorno cargar (`development`, `testing`, `production`)
+
+- **Desarrollo**:
+Se utiliza el fichero `.env.development` que configura la aplicación para crear una base de datos SQLite en el directorio `data`. SQLModel crea automáticamente la base de datos y las tablas correspondientes al iniciar la aplicación.
+
+- **Producción y Pruebas**:
+Se utilizan los ficheros  `.env.production` y `.env.testing` respectivamente. Estos configuran la conexión a una base de datos PostgreSQL preexistente. Ha que asegúrase de que la instancia de la base de datos esté creada para que SQLModel pueda generar las tablas al inicio.
+
+
+### Requisitos Previos
+- Python 3.11
+- Poetry
+
+#### Instalación de Dependencias Globales
+Instalar Poetry globalmente usando pipx:
+
+```sh
+   pipx install poetry
+```
+### Configuración Inicial
+- **Instalar Dependencias**:
+   ```sh
+   cd backend
+   poetry install
+   ```
+### Ejecución Local del Backend
+- **Activar el Entorno Virtual**:
+   ```sh
+   poetry shell
+   ```
+- **Iniciar el Servidor de Desarrollo**:
+   ```sh
+   uvicorn app.main:app --reload
+   ```
+
+### Documentación Interactiva de la API
+Acceder a la documentación interactiva generada por FastAPI, que utiliza OpenAPI para detallar y permitir la prueba de endpoints directamente desde el navegador:
+
+- **Swagger UI**:
+   ```
+   http://localhost:8000/docs
+   ```
+
+- **ReDoc**:
+   ```
+   http://localhost:8000/redoc
+   ```
 
 ## Licencia
 Este proyecto está licenciado bajo la Licencia Creative Commons Atribución-NoComercial-SinDerivadas 4.0 Internacional (CC BY-NC-ND 4.0). Para ver una copia de esta licencia, visite [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/).

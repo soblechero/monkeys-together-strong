@@ -54,7 +54,7 @@ class Settings(BaseSettings):
 
     SQLITE_FILE: str = "sqlite:///./data/dev.db"
 
-    # MultiHostUrl('postgresql+psycopg://postgres:4444@localhost:5432/app')
+    # MultiHostUrl('postgresql+psycopg://postgres:4444@localhost:5432/mts_db')
     @computed_field
     @property
     def DATABASE_URI(self) -> str:

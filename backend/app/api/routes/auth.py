@@ -65,10 +65,9 @@ def signup(*, session: SessionDep, user_data: UserCreate) -> Token:
         )
     )
 
-
-@router.post("/login/test-token", response_model=UserPublic)
-def test_token(current_user: CurrentUser) -> Any:
-    """
-    Test access token
-    """
-    return current_user
+# @router.post("/login/test-token", response_model=UserPublic)
+# def test_token(current_user: CurrentUser) -> Any:
+#     """
+#     Test access token
+#     """
+#     return current_user
