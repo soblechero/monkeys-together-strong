@@ -79,3 +79,7 @@ Se puede utilizar un solo comando de Ionic CLI que combina los pasos anteriores:
    - Abrir las herramientas de desarrollo del navegador (F12).
    - Seleccionar la vista adaptable y eligir un dispositivo móvil.
 
+
+
+## Licencia
+Este proyecto está licenciado bajo la Licencia Creative Commons Atribución-NoComercial-SinDerivadas 4.0 Internacional (CC BY-NC-ND 4.0). Para ver una copia de esta licencia, visite [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/).

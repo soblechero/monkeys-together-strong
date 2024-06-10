@@ -1,12 +1,11 @@
 import os
 import secrets
-import warnings
 from typing import Annotated, Any, Literal
 
+from dotenv import load_dotenv
 from pydantic import (
     AnyUrl,
     BeforeValidator,
-    PostgresDsn,
     computed_field
 )
 from pydantic_core import MultiHostUrl
@@ -22,6 +21,7 @@ def parse_cors(v: Any) -> list[str] | str:
 
 
 class Settings(BaseSettings):
+    load_dotenv()
     model_config = SettingsConfigDict(
         env_file=f"./.env.{os.getenv('ENV_MODE', 'development')}",  # Dynamically set env file
         env_ignore_empty=True,
@@ -49,8 +49,8 @@ class Settings(BaseSettings):
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = "changethis"
-    POSTGRES_DB: str = "app"
+    POSTGRES_PASSWORD: str = "4444"
+    POSTGRES_DB: str = "mts_db"
 
     SQLITE_FILE: str = "sqlite:///./data/dev.db"
 
