@@ -1,7 +1,7 @@
 # monkeys-together-strong
 Este monorepo contiene la aplicación móvil de recomendación de videojuegos desarrollada con Ionic y Vue, junto con su backend implementado en FastAPI y SQLModel.
 
-## Estructura del Proyecto
+## Estructura de los proyectos
 - **mobile-app/**: Código fuente de la aplicación móvil.
   - **test/**: Tests unitarios y de integración e2e.
   - **android/**: Código autogenerado para Android.
@@ -10,36 +10,34 @@ Este monorepo contiene la aplicación móvil de recomendación de videojuegos de
 - **backend/**: Código fuente del backend.
   - **test/**: Tests unitarios
 
-- **dist/**: Contiene el APK generado para Android.
 
-
-## Mobile App Setup
-### Configuración de Entornos
+## Mobile app setup
+### Configuración de entornos
 Se utilizan ficheros `.env` para gestionar la configuración en diferentes entornos. Las variables a configurar son:
 
 - VITE_API_BASE_URL: URL base del backend de la aplicación.
 - VITE_USE_MOCKS: Define si se usa el servicio mock para simular el backend (false para usar el backend real).
 
-### Requisitos Previos
+### Requisitos previos
 - Node.js y npm
 - Ionic CLI
 - Android Studio
 
-#### Instalación de Dependencias Globales
+#### Instalación de dependencias globales
 Instalar las herramientas necesarias globalmente:
 
 ```sh
 npm install -g @ionic/cli@latest native-run@latest
 ```
 
-### Configuración Inicial
-- **Instalar Dependencias**:
+### Configuración inicial
+- **Instalar dependencias**:
    ```sh
    cd mobile-app
    npm install
    ```
 
-- **Configurar Variables de Entorno en Windows**: 
+- **Configurar variables de entorno en Windows**: 
 
 Estas variables son necesarias para que las herramientas de desarrollo localicen el SDK de Android y ejecuten Android Studio y el emulador correctamente:
 
@@ -52,9 +50,9 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
      C:\Users\Usuario\AppData\Local\Programs\Android Studio\bin\studio64.exe
      ```
 
-### Compilar y Probar la Aplicación
+### Compilar y probar la aplicación
 #### Android
-- **Construir y sincronizar la Aplicación**:
+- **Construir y sincronizar la aplicación**:
    ```sh
    npm run build
    npx cap sync
@@ -65,69 +63,69 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
    npx cap open android
    ```
 
-- **Ejecutar en el Emulador**:
+- **Ejecutar en el emulador**:
    ```sh
    npx cap run android
    ```
 ##### Alternativa
 Se puede utilizar un solo comando de Ionic CLI que combina los pasos anteriores: construcción, sincronización y apertura en Android Studio:
 
-1. **Ejecutar el comando de Ionic CLI**:
+- **Ejecutar el comando de Ionic CLI**:
    ```sh
    ionic capacitor build android
    ```
 
 #### Navegador
-- **Ejecutar el Servidor de Desarrollo Local**:
+- **Ejecutar el servidor de desarrollo local**:
    ```sh
    ionic serve
    ```
 
-- **Simular Dispositivo Móvil**:
+- **Simular dispositivo móvil**:
    - Abrir las herramientas de desarrollo del navegador (F12).
    - Seleccionar la vista adaptable y eligir un dispositivo móvil.
 
 
 
-## Backend Setup
-### Configuración de la Base de Datos
+## Backend setup
+### Configuración de la base de datos
 La aplicación utiliza varios ficheros `.env` para gestionar la configuración de la base de datos en diferentes entornos. Se utiliza la variable `ENV_MODE` del fichero `.env` para determinar cuál de los ficheros de entorno cargar (`development`, `testing`, `production`)
 
 - **Desarrollo**:
 Se utiliza el fichero `.env.development` que configura la aplicación para crear una base de datos SQLite en el directorio `data`. SQLModel crea automáticamente la base de datos y las tablas correspondientes al iniciar la aplicación.
 
-- **Producción y Pruebas**:
-Se utilizan los ficheros  `.env.production` y `.env.testing` respectivamente. Estos configuran la conexión a una base de datos PostgreSQL preexistente. Ha que asegúrase de que la instancia de la base de datos esté creada para que SQLModel pueda generar las tablas al inicio.
+- **Producción y pruebas**:
+Se utilizan los ficheros  `.env.production` y `.env.testing` respectivamente. Estos configuran la conexión a una base de datos PostgreSQL preexistente. Es necesario asegurase que la instancia de la base de datos esté creada para que SQLModel pueda generar las tablas al inicio.
 
 
-### Requisitos Previos
+### Requisitos previos
 - Python 3.11
 - Poetry
 
-#### Instalación de Dependencias Globales
+#### Instalación de dependencias globales
 Instalar Poetry globalmente usando pipx:
 
 ```sh
    pipx install poetry
 ```
-### Configuración Inicial
-- **Instalar Dependencias**:
+### Configuración inicial
+- **Instalar dependencias**:
    ```sh
    cd backend
    poetry install
    ```
-### Ejecución Local del Backend
-- **Activar el Entorno Virtual**:
+### Ejecución local del backend
+- **Activar el entorno virtual**:
    ```sh
    poetry shell
    ```
-- **Iniciar el Servidor de Desarrollo**:
+- **Iniciar el servidor de desarrollo local**:
    ```sh
    uvicorn app.main:app --reload
    ```
 
-### Documentación Interactiva de la API
-Acceder a la documentación interactiva generada por FastAPI, que utiliza OpenAPI para detallar y permitir la prueba de endpoints directamente desde el navegador:
+### Documentación interactiva de la API
+Acceder a la documentación interactiva generada por FastAPI, la cual utiliza OpenAPI para definir y permitir la prueba de endpoints directamente desde el navegador:
 
 - **Swagger UI**:
    ```
