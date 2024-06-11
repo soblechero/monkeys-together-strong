@@ -50,7 +50,7 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
      C:\Users\Usuario\AppData\Local\Programs\Android Studio\bin\studio64.exe
      ```
 
-### Compilar y probar la aplicación
+### Construir y probar la aplicación
 #### Android
 - **Construir y sincronizar la aplicación**:
    ```sh
