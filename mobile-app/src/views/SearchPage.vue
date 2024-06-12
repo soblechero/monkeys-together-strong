@@ -102,9 +102,9 @@ const onSearch = async () => {
   if (searchQuery.value.trim()) {
     try {
       if (searchType.value === 'game') {
-        filteredGames.value = await searchGames([], [searchQuery.value], [], []);
+        filteredGames.value = await searchGames({names: [searchQuery.value]});
       } else {
-        filteredGames.value = await searchGames([searchQuery.value], [], [], []);
+        filteredGames.value = await searchGames({genres: [searchQuery.value]});
       }
     } catch (error) {
       const errorMessage = handleError(error, 'Failed to search games.');

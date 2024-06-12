@@ -62,7 +62,7 @@ const toast = ref({
 
 const loadGames = async () => {
   try {
-    games.value = await fetchGames([genreName], [], [], []);
+    games.value = await fetchGames({genres: [genreName]});
   } catch (error) {
     const errorMessage = handleError(error, 'Failed to load games for this genre.');
     showToast(errorMessage, 'danger');

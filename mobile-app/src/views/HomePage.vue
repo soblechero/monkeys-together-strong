@@ -93,7 +93,7 @@ const loadGames = async () => {
   try {
     genres.value = await getPreferenceGenres();
     const releaseYears = activeTag.value === 'new' ? [new Date().getFullYear()] : [];
-    const gamesList = await fetchGames(genres.value, [], releaseYears, []);
+    const gamesList = await fetchGames({genres: genres.value, releaseYears: releaseYears});
 
     if (genres.value.length > 0) {
       gamesByGenre.value = groupGamesByProvidedGenres(gamesList, genres.value);

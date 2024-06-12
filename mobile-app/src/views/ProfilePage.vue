@@ -92,7 +92,7 @@ const loadFavoriteGames = async () => {
   try {
     const gameNames = await getPreferenceGames();
     if (gameNames.length > 0) {
-      favoriteGames.value = await fetchGames([], gameNames, [], []);
+      favoriteGames.value = await fetchGames({names: gameNames});
     } else {
       favoriteGames.value = [];
     }

@@ -4,41 +4,45 @@ import {setPreferenceGames, addGameToPreferences, removeGameFromPreferences} fro
 import {handleApiError} from '@/services/api';
 import {convertGamesList} from '@/utils/games';
 
-const fetchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[],
-                          limit: number = 50, offset: number = 0): Promise<GamesList> => {
-    const criteria = buildGameSearchCriteria(genres, names, releaseYears, platforms, limit, offset);
-
+const fetchGames = async (criteria: GameSearchCriteria): Promise<GamesList> => {
+    const defaultCriteria = {
+        limit: 50,
+        offset: 0,
+        ...criteria
+    };
     try {
-        const response = await apiClient.get<GamesList>('/games', {params: criteria});
+        const response = await apiClient.get<GamesList>('/games', {params: defaultCriteria});
         return convertGamesList(response.data);
     } catch (error) {
         throw handleApiError(error, 'Failed to fetch games.');
     }
 };
 
-const searchGames = async (genres: string[], names: string[], releaseYears: number[], platforms: string[],
-                           limit: number = 50, offset: number = 0): Promise<GamesList> => {
-    const criteria = buildGameSearchCriteria(genres, names, releaseYears, platforms, limit, offset);
-
+const searchGames = async (criteria: GameSearchCriteria): Promise<GamesList> => {
+    const defaultCriteria = {
+        limit: 50,
+        offset: 0,
+        ...criteria
+    };
     try {
-        const response = await apiClient.get<GamesList>('/games/search', {params: criteria});
+        const response = await apiClient.get<GamesList>('/games/search', {params: defaultCriteria});
         return convertGamesList(response.data);
     } catch (error) {
         throw handleApiError(error, 'Failed to search games.');
     }
 };
 
-function buildGameSearchCriteria(genres: string[], names: string[], releaseYears: number[], platforms: string[],
-                                 limit: number, offset: number): GameSearchCriteria {
-    const criteria: GameSearchCriteria = {};
-    if (genres?.length > 0) criteria.genres = genres;
-    if (names?.length > 0) criteria.names = names;
-    if (releaseYears?.length > 0) criteria.releaseYears = releaseYears;
-    if (platforms?.length > 0) criteria.platforms = platforms;
-    criteria.limit = limit ?? 50;
-    criteria.offset = offset ?? 0;
-    return criteria;
-}
+// function buildGameSearchCriteria(genres: string[], names: string[], releaseYears: number[], platforms: string[],
+//                                  limit: number, offset: number): GameSearchCriteria {
+//     const criteria: GameSearchCriteria = {};
+//     if (genres?.length > 0) criteria.genres = genres;
+//     if (names?.length > 0) criteria.names = names;
+//     if (releaseYears?.length > 0) criteria.releaseYears = releaseYears;
+//     if (platforms?.length > 0) criteria.platforms = platforms;
+//     criteria.limit = limit ?? 50;
+//     criteria.offset = offset ?? 0;
+//     return criteria;
+// }
 
 const fetchFavoriteGames = async (): Promise<string[]> => {
     try {
@@ -80,7 +84,7 @@ const removeGameFromFavorites = async (gameName: string): Promise<void> => {
 };
 
 const fetchGameDetails = async (gameName: string): Promise<Game> => {
-    const games = await fetchGames([], [gameName], [], []);
+    const games = await fetchGames({names: [gameName]});
     if (games.length === 0) {
         throw new Error('Game not found');
     }
@@ -88,7 +92,7 @@ const fetchGameDetails = async (gameName: string): Promise<Game> => {
 };
 
 const fetchSimilarGames = async (genres: string[]): Promise<Game[]> => {
-    return await fetchGames(genres, [], [], []);
+    return await fetchGames({genres: genres});
 };
 
 
