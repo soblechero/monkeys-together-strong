@@ -126,7 +126,7 @@ class IGDBClient:
         query = QueryBuilder.build_game_query(criteria, QueryBuilder.SearchType.APPROXIMATE)
         return self._api_request('games.pb', query, GameResult)
 
-    def _api_request(self, endpoint: str, query: str, result_type):
+    def _api_request(self, endpoint: str, query: str, result_type) -> dict:
         """Realizar una solicitud a la API IGDB y devolver los datos en formato de diccionario."""
         self.ensure_valid_wrapper()
         logger.info(f"IGDB Query: {query}")
