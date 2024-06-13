@@ -73,11 +73,12 @@ class QueryBuilder:
 
 
 class IGDBClient:
-    def __init__(self, client_id: str, client_secret: str, access_token: str | None = None) -> None:
+    def __init__(self, client_id: str, client_secret: str,
+                 access_token: str | None = None, token_expiry: float | None = None) -> None:
         self.client_id: str = client_id
         self.client_secret: str = client_secret
         self.access_token: str | None = access_token
-        self.token_expiry: float = 0
+        self.token_expiry: float | None = token_expiry
         self.wrapper: IGDBWrapper | None = None
         self._initialize_wrapper()
 
@@ -86,9 +87,9 @@ class IGDBClient:
         self.get_access_token()
         self.wrapper = IGDBWrapper(self.client_id, self.access_token)
 
-    def get_access_token(self) -> str:
+    def get_access_token(self) -> dict[str, str]:
         """Obtener el token de acceso de Twitch, actualízalo si está vencido."""
-        if self.access_token is None or time.time() > self.token_expiry:
+        if not self.access_token or not self.token_expiry or time.time() > self.token_expiry:
             url = settings.IGDB_ACCESS_TOKEN_URL
             params = {
                 "client_id": self.client_id,
@@ -100,49 +101,62 @@ class IGDBClient:
             data = response.json()
             self.access_token = data['access_token']
             self.token_expiry = time.time() + data['expires_in']
-        return self.access_token
+        return {'access_token': self.access_token, 'token_expiry': self.token_expiry}
 
     def ensure_valid_wrapper(self) -> None:
         """Asegurarse que el wrapper de IGDB se inicialice con un token válido."""
         if self.wrapper is None or time.time() > self.token_expiry:
             self._initialize_wrapper()
 
+    def renew_access_token(self) -> None:
+        """Renovar el token de acceso de IGDB."""
+        self.access_token = None
+        self.token_expiry = None
+        self._initialize_wrapper()
+
     def fetch_genres(self, offset=0, limit=25) -> dict:
         """Obtener géneros de juegos utilizando la API IGDB."""
-        self.ensure_valid_wrapper()
-
         query = f'fields name; offset {offset}; limit {limit}; sort name asc;'
         return self._api_request('genres.pb', query, GenreResult)
 
     def fetch_games(self, criteria: GameSearchCriteria) -> dict:
         """Buscar juegos que coincidan con los criterios de búsqueda utilizando la API IGDB. Usa búsqueda exacta."""
-        self.ensure_valid_wrapper()
         query = QueryBuilder.build_game_query(criteria, QueryBuilder.SearchType.EXACT)
         return self._api_request('games.pb', query, GameResult)
 
     def search_games(self, criteria: GameSearchCriteria) -> dict:
         """Buscar juegos que coincidan con los criterios de búsqueda utilizando la API IGDB. Usa búsqueda aproximada."""
-        self.ensure_valid_wrapper()
         query = QueryBuilder.build_game_query(criteria, QueryBuilder.SearchType.APPROXIMATE)
         return self._api_request('games.pb', query, GameResult)
 
     def _api_request(self, endpoint: str, query: str, result_type) -> dict:
         """Realizar una solicitud a la API IGDB y devolver los datos en formato de diccionario."""
         self.ensure_valid_wrapper()
-        logger.info(f"IGDB Query: {query}")
-        byte_array = self.wrapper.api_request(endpoint, query)
-        result_instance = result_type()
-        result_instance.ParseFromString(byte_array)
-        return MessageToDict(result_instance)
+        try:
+            logger.info(f"IGDB Query: {query}")
+            byte_array = self.wrapper.api_request(endpoint, query)
+            result_instance = result_type()
+            result_instance.ParseFromString(byte_array)
+            return MessageToDict(result_instance)
+        except requests.HTTPError as e:
+            if e.response.status_code in [401, 403]:
+                logger.warning("IGDB Access Token Expired, Renewing...")
+                self.renew_access_token()
+                byte_array = self.wrapper.api_request(endpoint, query)
+                result_instance = result_type()
+                result_instance.ParseFromString(byte_array)
+                return MessageToDict(result_instance)
+            raise
 
 
 # Instancia global de IGDBClient, nivel de módulo, se creará una instancia una vez,
 # cuando se importe el módulo por primera vez, y se reutilizará durante el ciclo de vida de la aplicación.
 # TODO: guardar y recuperar el token de acceso en la base de datos, en lugar de en memoria.
-igdb_client = IGDBClient(settings.IGDB_CLIENT_ID, settings.IGDB_CLIENT_SECRET, settings.IGDB_ACCESS_TOKEN)
+igdb_client = IGDBClient(settings.IGDB_CLIENT_ID, settings.IGDB_CLIENT_SECRET,
+                         settings.IGDB_ACCESS_TOKEN, settings.IGDB_ACCESS_TOKEN_EXPIRY)
 
 # if __name__ == "__main__":
-#     # print(igdb_client.access_token)
+#     print(igdb_client.access_token)
 #     criteria = GameSearchCriteria(
 #         # genres=["Shooter"],
 #         names=["hell"],  # , "Cyberpunk 2077"],
@@ -151,6 +165,6 @@ igdb_client = IGDBClient(settings.IGDB_CLIENT_ID, settings.IGDB_CLIENT_SECRET, s
 #         limit=10,
 #         offset=0
 #     )
-#     games = igdb_client.fetch_games(criteria)
+#     games = igdb_client.search_games(criteria)
 #     print(len(games['games']))
-#     print(GamesDetails.parse_igdb_games_data(games))
+#     # print(GamesDetails.parse_igdb_games_data(games))

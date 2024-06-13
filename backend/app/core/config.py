@@ -40,7 +40,8 @@ class Settings(BaseSettings):
     IGDB_CLIENT_ID: str = ""
     IGDB_CLIENT_SECRET: str = ""
     IGDB_ACCESS_TOKEN_URL: AnyUrl = "https://id.twitch.tv/oauth2/token"
-    IGDB_ACCESS_TOKEN: str = ""
+    IGDB_ACCESS_TOKEN: str | None = None
+    IGDB_ACCESS_TOKEN_EXPIRY: float | None = None
 
     FIRST_USER: str = "testuser1@test.dev"
     FIRST_USER_PASSWORD: str = "Test1234!"
