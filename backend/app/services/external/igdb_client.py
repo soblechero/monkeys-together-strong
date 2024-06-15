@@ -8,7 +8,7 @@ from igdb.igdbapi_pb2 import GameResult, GenreResult  # type: ignore
 from igdb.wrapper import IGDBWrapper
 
 from app.core.config import settings
-from app.models.game import GameSearchCriteria, GamesDetails
+from app.models.game import GameSearchCriteria
 from app.utils.date import year_to_timestamp
 
 """
@@ -27,7 +27,6 @@ class QueryBuilder:
 
     @staticmethod
     def build_game_query(criteria: GameSearchCriteria, search_type: 'QueryBuilder.SearchType') -> str:
-        """Construir una consulta de búsqueda de juegos utilizando los criterios de búsqueda proporcionados."""
         fields = "fields name, genres.name, cover.url, total_rating, first_release_date, summary, platforms.name;"
         conditions = QueryBuilder._build_conditions(criteria, search_type)
 
@@ -83,12 +82,10 @@ class IGDBClient:
         self._initialize_wrapper()
 
     def _initialize_wrapper(self) -> None:
-        """Inicializar el wrapper de IGDB con un token de acceso válido"""
         self.get_access_token()
         self.wrapper = IGDBWrapper(self.client_id, self.access_token)
 
     def get_access_token(self) -> dict[str, str]:
-        """Obtener el token de acceso de Twitch, actualízalo si está vencido."""
         if not self.access_token or not self.token_expiry or time.time() > self.token_expiry:
             url = settings.IGDB_ACCESS_TOKEN_URL
             params = {
@@ -104,12 +101,10 @@ class IGDBClient:
         return {'access_token': self.access_token, 'token_expiry': self.token_expiry}
 
     def ensure_valid_wrapper(self) -> None:
-        """Asegurarse que el wrapper de IGDB se inicialice con un token válido."""
         if self.wrapper is None or time.time() > self.token_expiry:
             self._initialize_wrapper()
 
     def renew_access_token(self) -> None:
-        """Renovar el token de acceso de IGDB."""
         self.access_token = None
         self.token_expiry = None
         self._initialize_wrapper()
@@ -130,7 +125,7 @@ class IGDBClient:
         return self._api_request('games.pb', query, GameResult)
 
     def _api_request(self, endpoint: str, query: str, result_type) -> dict:
-        """Realizar una solicitud a la API IGDB y devolver los datos en formato de diccionario."""
+        """Realizar una solicitud a la API IGDB y devuelve los datos en formato de diccionario."""
         self.ensure_valid_wrapper()
         try:
             logger.info(f"IGDB Query: {query}")

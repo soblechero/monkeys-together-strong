@@ -32,18 +32,6 @@ const searchGames = async (criteria: GameSearchCriteria): Promise<GamesList> => 
     }
 };
 
-// function buildGameSearchCriteria(genres: string[], names: string[], releaseYears: number[], platforms: string[],
-//                                  limit: number, offset: number): GameSearchCriteria {
-//     const criteria: GameSearchCriteria = {};
-//     if (genres?.length > 0) criteria.genres = genres;
-//     if (names?.length > 0) criteria.names = names;
-//     if (releaseYears?.length > 0) criteria.releaseYears = releaseYears;
-//     if (platforms?.length > 0) criteria.platforms = platforms;
-//     criteria.limit = limit ?? 50;
-//     criteria.offset = offset ?? 0;
-//     return criteria;
-// }
-
 const fetchFavoriteGames = async (): Promise<string[]> => {
     try {
         const response = await apiClient.get<GamesBaseList>('/user/games');
