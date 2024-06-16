@@ -57,7 +57,6 @@ async def search_games(
         limit: Annotated[int, Query(alias="limit")] = 25,
         offset: Annotated[int, Query(alias="offset")] = 0
 ) -> list[GameDetails]:
-    print(names)
     criteria = GameSearchCriteria.model_validate(
         {
             "genres": genres,

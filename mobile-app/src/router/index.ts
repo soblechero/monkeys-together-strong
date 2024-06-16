@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: { requiresAuth: true }
       },
       {
-        path: '/genre/:name',
+        path: '/genres/:name',
         name: 'GenrePage',
         component: () => import ("@/views/GenrePage.vue"),
         meta: { requiresAuth: true }
@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/game/:name',
+    path: '/games/:name',
     name: 'GameDetails',
     component: () => import ("@/views/GameDetailsPage.vue"),
     meta: { requiresAuth: true }

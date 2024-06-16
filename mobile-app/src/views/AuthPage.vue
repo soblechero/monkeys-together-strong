@@ -14,7 +14,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding-start ion-padding-end">
-      <component :is="authModeComponent" @authSuccess="handleAuthSuccess"/>
+      <component :is="authModeComponent" @auth-success="handleAuthSuccess"/>
     </ion-content>
   </ion-page>
 </template>
@@ -35,15 +35,16 @@ import {ref, computed} from 'vue';
 import LoginForm from '@/components/LoginForm.vue';
 import SignupForm from '@/components/SignupForm.vue';
 
-const authMode = ref('login');
 //const router = useRouter();
+const authMode = ref('login');
+
 
 const authModeComponent = computed(() =>
     authMode.value === 'login' ? LoginForm : SignupForm
 );
 
 const handleAuthSuccess = () => {
-  //await router.push('/');
   console.log('Authentication successful');
+  //await router.push('/');
 };
 </script>

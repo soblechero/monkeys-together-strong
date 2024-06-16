@@ -1,5 +1,6 @@
 # monkeys-together-strong
-Este monorepo contiene la aplicación móvil de recomendación de videojuegos desarrollada con Ionic y Vue, junto con su backend implementado en FastAPI y SQLModel.
+Este monorepo alberga la aplicación móvil de recomendación de videojuegos, desarrollada utilizando Ionic con Capacitor y Vue para el frontend, junto con su backend implementado usando FastAPI y SQLModel.
+
 
 ## Estructura de los proyectos
 - **mobile-app/**: Código fuente de la aplicación móvil.

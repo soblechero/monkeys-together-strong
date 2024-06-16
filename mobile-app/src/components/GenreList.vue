@@ -45,7 +45,8 @@ const fetchFavorites = async () => {
   try {
     favorites.value = await getPreferenceGenres();
   } catch (error) {
-    console.error('Failed to fetch favorite genres:', error);
+    const errorMessage = handleError(error, 'Failed to fetch favorites.');
+    emit('show-toast', errorMessage, 'danger');
   }
 };
 
