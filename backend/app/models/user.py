@@ -2,8 +2,6 @@ from typing import TYPE_CHECKING
 
 from sqlmodel import Field, SQLModel, Relationship
 
-from app.models.links import UserGameLink, UserGenreLink
-
 if TYPE_CHECKING:
     from app.models.game import Game
     from app.models.genre import Genre
@@ -20,6 +18,16 @@ class UserCreate(UserBase):
 
 class UserPublic(UserBase):
     id: int
+
+
+class UserGameLink(SQLModel, table=True):
+    user_id: int | None = Field(default=None, foreign_key="user.id", primary_key=True)
+    game_id: int | None = Field(default=None, foreign_key="game.id", primary_key=True)
+
+
+class UserGenreLink(SQLModel, table=True):
+    user_id: int | None = Field(default=None, foreign_key="user.id", primary_key=True)
+    genre_id: int | None = Field(default=None, foreign_key="genre.id", primary_key=True)
 
 
 # Database model, database table inferred from class name

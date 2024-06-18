@@ -1,15 +1,12 @@
 from datetime import datetime
-from typing import Annotated, Self, TYPE_CHECKING
+from typing import Annotated, Self
 
 from fastapi import Query
 from pydantic import HttpUrl, ConfigDict, AliasGenerator
 from pydantic.alias_generators import to_camel
 from sqlmodel import SQLModel, Field, Relationship
 
-from app.models.links import UserGameLink
-
-if TYPE_CHECKING:
-    from app.models.user import User
+from app.models.user import User, UserGameLink
 
 
 class GameBase(SQLModel):

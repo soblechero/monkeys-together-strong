@@ -1,11 +1,8 @@
-from typing import Self, TYPE_CHECKING
+from typing import Self
 
 from sqlmodel import SQLModel, Field, Relationship
 
-from app.models.links import UserGenreLink
-
-if TYPE_CHECKING:
-    from app.models.user import User
+from app.models.user import User, UserGenreLink
 
 
 class GenreBase(SQLModel):
