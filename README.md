@@ -44,11 +44,11 @@ Estas variables son necesarias para que las herramientas de desarrollo localicen
 
    - **ANDROID_HOME**: Apunta al directorio del SDK de Android. Necesario para que las herramientas de desarrollo como Gradle encuentren las herramientas del SDK.
      ```
-     C:\Users\Usuario\AppData\Local\Android\Sdk
+     ANDROID_HOME=C:\Users\Usuario\AppData\Local\Android\Sdk
      ```
    - **CAPACITOR_ANDROID_STUDIO_PATH**: Ruta al ejecutable de Android Studio. Necesario para abrir Android Studio desde la línea de comandos con Ionic/Capacitor CLI.
      ```
-     C:\Users\Usuario\AppData\Local\Programs\Android Studio\bin\studio64.exe
+     CAPACITOR_ANDROID_STUDIO_PATH=C:\Users\Usuario\AppData\Local\Programs\Android Studio\bin\studio64.exe
      ```
 
 ### Construir y probar la aplicación
