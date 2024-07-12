@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const handleApiError = (error: unknown, contextMessage: string): Error => {
+const handleApiError = (error: unknown, contextMessage: string = ''): Error => {
     let message = `${contextMessage} An error occurred. Please try again.`;
 
     if (axios.isAxiosError(error)) {
