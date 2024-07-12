@@ -1,4 +1,4 @@
-const handleError = (error: unknown, contextMessage: string): string => {
+const handleError = (error: unknown, contextMessage: string = ''): string => {
     console.error('Error:', error);
     if (error instanceof Error) {
         return error.message;
@@ -7,4 +7,3 @@ const handleError = (error: unknown, contextMessage: string): string => {
 };
 
 export {handleError};
-
